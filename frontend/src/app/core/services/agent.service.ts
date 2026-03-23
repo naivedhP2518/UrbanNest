@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Agent {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AgentService {
+  private apiUrl = 'http://localhost:5000/api/users';
+
+  constructor(private http: HttpClient) {}
+
+  getAgents(): Observable<{ success: boolean; count: number; data: Agent[] }> {
+    return this.http.get<{ success: boolean; count: number; data: Agent[] }>(`${this.apiUrl}/agents`);
+  }
+}

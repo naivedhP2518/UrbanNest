@@ -1,0 +1,60 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Create Account</h2>
+      <p>Join our community of real estate professionals</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="auth-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" [(ngModel)]="userData.name" required placeholder="John Doe">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" [(ngModel)]="userData.email" required placeholder="name@example.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="userData.password" required minlength="6" placeholder="••••••••">
+      </div>
+
+      <div class="form-group dropdown-container">
+        <label>Sign up as</label>
+        <div class="custom-dropdown glass" (click)="toggleDropdown()">
+          <span class="selected-value">{{ getSelectedRoleLabel() }}</span>
+          <svg class="dropdown-chevron" [class.open]="isDropdownOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="dropdown-menu glass" *ngIf="isDropdownOpen">
+          <div class="dropdown-item" *ngFor="let r of roles" (click)="selectRole(r.value)" [class.active]="userData.role === r.value">
+            <span class="role-icon">
+              <!-- House SVG for User -->
+              <svg *ngIf="r.value === 'user'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <!-- Briefcase SVG for Agent -->
+              <svg *ngIf="r.value === 'agent'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <!-- Shield SVG for Admin -->
+              <svg *ngIf="r.value === 'admin'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <span class="role-label">{{ r.label }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="!registerForm.valid || loading">
+        {{ loading ? 'Creating Account...' : 'Get Started' }}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Log in here</a></p>
+    </div>
+  </div>
+</div>

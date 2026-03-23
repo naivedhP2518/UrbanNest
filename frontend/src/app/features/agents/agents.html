@@ -1,0 +1,49 @@
+<div class="container py-12">
+  <div class="section-header">
+    <h1 class="section-title">Meet Our Expert Agents</h1>
+    <p class="section-subtitle">Professional agents ready to help you find your dream home.</p>
+    <div class="header-accent"></div>
+  </div>
+
+  <div *ngIf="loading" class="flex-center py-20">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="agent-grid" *ngIf="!loading">
+    <div *ngFor="let agent of agents" class="agent-card">
+      <div class="agent-header">
+        <span class="status-badge">Available</span>
+        <div class="agent-avatar-container">
+          <div class="avatar-ring"></div>
+          <img [src]="agent.avatar ? (agent.avatar.startsWith('http') ? agent.avatar : 'http://localhost:5000' + agent.avatar) : 'assets/default-avatar.png'" 
+               [alt]="agent.name" 
+               class="agent-img">
+        </div>
+      </div>
+      
+      <div class="agent-body">
+        <div class="badge-row">
+          <span class="verified-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Verified
+          </span>
+          <span class="rating-badge">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            4.9
+          </span>
+        </div>
+        
+        <h3 class="agent-name">{{ agent.name }}</h3>
+        <p class="agent-role">Expert Real Estate Consultant</p>
+        
+        <div class="agent-bio">
+          Specialize in luxury residential properties and commercial investments.
+        </div>
+
+        <div class="agent-actions">
+          <button class="primary-btn">View Profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

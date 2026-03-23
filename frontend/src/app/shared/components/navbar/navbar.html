@@ -1,0 +1,37 @@
+<nav class="navbar">
+  <div class="container nav-content">
+    <a routerLink="/" class="logo">
+      <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 9.5L12 3L21 9.5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V9.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text">Real<span class="accent">Estate</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/properties" routerLinkActive="active">Properties</a></li>
+      <li><a routerLink="/agents" routerLinkActive="active">Agents</a></li>
+      <li *ngIf="authService.currentUser()?.role === 'agent' || authService.currentUser()?.role === 'admin'">
+        <a routerLink="/agent/dashboard" routerLinkActive="active">Dashboard</a>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <ng-container *ngIf="!authService.isLoggedIn(); else userMenu">
+        <a routerLink="/login" class="btn btn-outline login-btn">Log In</a>
+        <a routerLink="/register" class="btn btn-primary">Sign Up</a>
+      </ng-container>
+      
+      <ng-template #userMenu>
+        <div class="user-profile">
+          <div class="user-info-dropdown">
+            <span class="user-name">{{ authService.currentUser()?.name }}</span>
+            <span class="user-role" *ngIf="authService.currentUser()?.role !== 'user'">{{ authService.currentUser()?.role }}</span>
+          </div>
+          <button (click)="logout()" class="btn btn-outline logout-btn small">Logout</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</nav>
