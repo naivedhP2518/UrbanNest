@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.css'
+  styleUrl: './chat.component.css',
 })
 export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() propertyId!: string;
@@ -24,6 +24,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   messages: Message[] = [];
   newMessage = '';
   currentUser: any;
+  conversationId: string | null = null;
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -33,10 +34,25 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnInit() {
     this.currentUser = this.authService.currentUser();
-    if (this.currentUser && this.propertyId) {
-      this.chatService.joinRoom(this.currentUser.id, this.propertyId);
+    if (this.currentUser && this.propertyId && this.agentId) {
+      const token = this.authService.getToken();
+      if (token) {
+        this.chatService.connect(token);
+      }
+
+      // Create or get existing conversation
+      this.chatService
+        .createConversation(this.agentId, this.propertyId)
+        .subscribe((res: any) => {
+          if (res.success) {
+            this.conversationId = res.data._id;
+            this.chatService.joinConversation(this.conversationId!);
+            this.chatService.loadMessages(this.conversationId!);
+          }
+        });
+
       this.subscription.add(
-        this.chatService.messages$.subscribe(msgs => {
+        this.chatService.messages$.subscribe((msgs) => {
           this.messages = msgs;
           this.scrollToBottom();
         })
@@ -46,7 +62,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.chatService.disconnect();
+    if (this.conversationId) {
+      this.chatService.leaveConversation(this.conversationId);
+    }
   }
 
   ngAfterViewChecked() {
@@ -54,15 +72,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   sendMessage() {
-    if (this.newMessage.trim() && this.currentUser) {
-      const messageData = {
-        sender: this.currentUser.id,
-        receiver: this.agentId,
-        property: this.propertyId,
-        content: this.newMessage
-      };
-
-      this.chatService.sendMessage(messageData);
+    if (this.newMessage.trim() && this.conversationId) {
+      this.chatService.sendMessage(this.conversationId, this.newMessage);
       this.newMessage = '';
     }
   }
@@ -74,7 +85,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private scrollToBottom(): void {
     try {
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+      this.myScrollContainer.nativeElement.scrollTop =
+        this.myScrollContainer.nativeElement.scrollHeight;
     } catch (err) {}
   }
 }
