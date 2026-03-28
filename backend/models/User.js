@@ -18,9 +18,18 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Please add a password'],
       minlength: 6,
       select: false, // Don't return password by default
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allow multiple null values
+    },
+    authProvider: {
+      type: String,
+      enum: ['local', 'google'],
+      default: 'local',
     },
     role: {
       type: String,
@@ -29,7 +38,7 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: 'default-avatar.png'
+      default: 'default-avatar.png',
     },
     createdAt: {
       type: Date,
@@ -41,10 +50,10 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// Hash password before saving
+// Hash password before saving (only for local auth users)
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    next();
+  if (!this.isModified('password') || !this.password) {
+    return next();
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -53,6 +62,7 @@ userSchema.pre('save', async function (next) {
 
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) return false;
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
 
-const messageSchema = new mongoose.Schema({
-  sender: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+const messageSchema = new mongoose.Schema(
+  {
+    conversation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Conversation',
+      required: true,
+    },
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
-  receiver: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  property: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Property',
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  isRead: {
-    type: Boolean,
-    default: false
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
+
+// Index for quick message retrieval by conversation
+messageSchema.index({ conversation: 1, createdAt: 1 });
 
 module.exports = mongoose.model('Message', messageSchema);
