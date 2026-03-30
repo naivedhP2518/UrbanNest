@@ -11,6 +11,7 @@ import { InfoPageComponent } from './features/static/info/info';
 import { AgentDashboardComponent } from './features/agent/dashboard/dashboard';
 import { MyListingsComponent } from './features/agent/my-listings/my-listings';
 import { AddPropertyComponent } from './features/agent/add-property/add-property';
+import { ChatPageComponent } from './features/chat/chat';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'properties', component: PropertiesComponent },
   { path: 'properties/:id', component: PropertyDetailComponent },
   { path: 'agents', component: AgentsComponent },
+  { path: 'chat', component: ChatPageComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'privacy', component: InfoPageComponent },
@@ -30,5 +32,5 @@ export const routes: Routes = [
   { path: 'agent/dashboard', component: AgentDashboardComponent },
   { path: 'agent/my-listings', component: MyListingsComponent },
   { path: 'agent/add-property', component: AddPropertyComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
