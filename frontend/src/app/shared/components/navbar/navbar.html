@@ -1,0 +1,103 @@
+<nav class="navbar">
+  <div class="container nav-content">
+    <a routerLink="/" class="logo">
+      <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 9.5L12 3L21 9.5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V9.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text">Real<span class="accent">Estate</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <a routerLink="/properties" routerLinkActive="active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"></path>
+            <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+            <path d="M9 7h6"></path>
+            <path d="M9 11h6"></path>
+            <path d="M9 15h6"></path>
+          </svg>
+          Properties
+        </a>
+      </li>
+      <li>
+        <a routerLink="/agents" routerLinkActive="active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Agents
+        </a>
+      </li>
+      <li *ngIf="authService.isLoggedIn()">
+        <a routerLink="/chat" routerLinkActive="active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z"/>
+          </svg>
+          Chat
+        </a>
+      </li>
+      <li *ngIf="authService.currentUser()?.role === 'agent' || authService.currentUser()?.role === 'admin'">
+        <a routerLink="/agent/dashboard" routerLinkActive="active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9"></rect>
+            <rect x="14" y="3" width="7" height="5"></rect>
+            <rect x="14" y="12" width="7" height="9"></rect>
+            <rect x="3" y="16" width="7" height="5"></rect>
+          </svg>
+          Dashboard
+        </a>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <ng-container *ngIf="!authService.isLoggedIn(); else userMenu">
+        <a routerLink="/login" class="btn btn-outline login-btn">Log In</a>
+        <a routerLink="/register" class="btn btn-primary">Sign Up</a>
+      </ng-container>
+      
+      <ng-template #userMenu>
+        <div class="user-profile-container">
+          <button class="user-profile-btn" (click)="toggleMenu()" [class.active]="isMenuOpen">
+            <div class="user-avatar-container">
+              <img [src]="authService.getAvatarUrl()" alt="Profile" class="user-avatar-img" />
+            </div>
+            <div class="user-info-dropdown-trigger">
+              <span class="user-name">{{ authService.currentUser()?.name }}</span>
+              <span class="user-role" *ngIf="authService.currentUser()?.role !== 'user'">{{ authService.currentUser()?.role }}</span>
+            </div>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="profile-dropdown-menu" *ngIf="isMenuOpen">
+            <div class="dropdown-header">
+              <p class="dropdown-name">{{ authService.currentUser()?.name }}</p>
+              <p class="dropdown-email">{{ authService.currentUser()?.email }}</p>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a routerLink="/profile" class="dropdown-item" (click)="isMenuOpen = false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              Edit Profile
+            </a>
+            <button (click)="logout()" class="dropdown-item text-danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</nav>

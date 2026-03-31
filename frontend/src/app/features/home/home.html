@@ -1,0 +1,126 @@
+<section class="hero-wrapper">
+  <div class="hero-bg-accent"></div>
+  <div class="container hero-content">
+    <div class="hero-text-area">
+      <div class="premium-badge">
+        <span class="pulse-dot"></span>
+        <span class="badge-text">Modern Housing Solutions</span>
+      </div>
+      
+      <h1 class="hero-title">Find Your Dream Home in a <span class="text-gradient">Modern Way.</span></h1>
+      <p class="hero-description">Discover the most premium listings in your favorite cities. We provide the best real estate services with a touch of elegance and professionalism.</p>
+      
+      <div class="hero-cta">
+        <a routerLink="/properties" class="btn btn-primary">Explore Properties</a>
+        <a routerLink="/agents" class="btn btn-outline">Meet Agents</a>
+      </div>
+
+      <div class="hero-stats glass">
+        <div class="stat-card">
+          <span class="stat-num" *ngIf="stats.properties > 0; else zeroStat">{{ stats.properties }}</span>
+          <span class="stat-desc">Properties</span>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-card">
+          <span class="stat-num" *ngIf="stats.agents > 0; else zeroStat">{{ stats.agents }}</span>
+          <span class="stat-desc">Experts</span>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-card">
+          <span class="stat-num" *ngIf="stats.clients > 0; else zeroStat">{{ stats.clients }}</span>
+          <span class="stat-desc">Clients</span>
+        </div>
+      </div>
+      <ng-template #zeroStat><span class="stat-num">0</span></ng-template>
+    </div>
+    
+    <div class="hero-visual">
+      <div class="main-visual-card">
+        <img src="assets/modern-home.png" alt="Luxury Modern Home">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section py-8">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge">Why Choose Us</span>
+      <h2 class="section-title">We Provide The Best <span class="text-gradient">Experience</span></h2>
+      <p class="section-subtitle mx-auto">We combine industry expertise with a modern approach to give you the smoothest real estate journey possible.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card glass">
+        <div class="feature-icon search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <h3>Easy Search</h3>
+        <p>Find your next home with our advanced filters and intuitive search interface.</p>
+      </div>
+      <div class="feature-card glass">
+        <div class="feature-icon agents">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <h3>Expert Agents</h3>
+        <p>Connect with the industry's most trusted and experienced real estate advisors.</p>
+      </div>
+      <div class="feature-card glass">
+        <div class="feature-icon secure">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <h3>Secure Process</h3>
+        <p>Transact with peace of mind through our verified and secure documentation process.</p>
+      </div>
+      <div class="feature-card glass">
+        <div class="feature-icon luxury">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <h3>Premium Selection</h3>
+        <p>Access exclusive listings of high-end luxury properties you won't find anywhere else.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="featured-preview py-8">
+  <div class="container">
+    <div class="flex-between mb-8">
+      <div class="section-header">
+        <span class="badge">Featured Properties</span>
+        <h2 class="section-title">Discover <span class="text-gradient">Luxury Listings</span></h2>
+      </div>
+      <a routerLink="/properties" class="btn btn-outline">Browse All</a>
+    </div>
+<br>
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex-center py-20" style="display: flex; justify-content: center; width: 100%;">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Dynamic Featured Properties -->
+    <div class="preview-cards" *ngIf="!loading && featuredProperties.length > 0">
+      <div class="preview-item glass" *ngFor="let property of featuredProperties" [routerLink]="['/properties', property._id]" style="cursor: pointer;">
+        <img [src]="property.images && property.images.length > 0 ? (property.images[0].startsWith('http') ? property.images[0] : 'http://localhost:5000' + property.images[0]) : 'assets/modern-home.png'" [alt]="property.title">
+        <div class="preview-content">
+          <span class="p-type" style="text-transform: uppercase;">FOR {{ property.type }}</span>
+          <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ property.title }}</h3>
+          <p class="p-location">{{ property.city }}</p>
+          <div class="p-footer">
+            <span class="p-price">₹{{ property.price.toLocaleString('en-IN') }}</span>
+            <button class="arrow-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && featuredProperties.length === 0" class="empty-state text-center py-10" style="color: #666; font-weight: 500; display: flex; justify-content: center; width: 100%;">
+       <p>Currently no properties have been uploaded to the database.</p>
+    </div>
+  </div>
+</section>
+
+

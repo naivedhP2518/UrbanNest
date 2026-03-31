@@ -1,0 +1,60 @@
+<div class="chat-drawer" [class.open]="isOpen">
+  <div class="chat-header">
+    <div class="agent-info">
+      <div class="avatar-sm">
+        <div class="avatar-ring">
+          <img [src]="getAvatarUrl()" [alt]="agentName">
+        </div>
+        <span class="online-indicator"></span>
+      </div>
+      <div>
+        <h4>{{ agentName }}</h4>
+        <span class="status-text">Online | Agent</span>
+      </div>
+    </div>
+    <button class="close-btn" (click)="closeChat()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <div class="chat-messages" #scrollMe>
+    <div *ngFor="let msg of messages" 
+         class="message-wrapper" 
+         [class.sent]="msg.sender._id === currentUser?.id">
+      <div class="message-bubble">
+        <p>{{ msg.content }}</p>
+        <span class="time">{{ msg.createdAt | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="messages.length === 0" class="empty-chat">
+      <div class="empty-icon-wrapper">
+        <svg class="empty-svg" width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" fill="url(#bubble_grad)" stroke="white" stroke-width="0.5"/>
+          <defs>
+            <linearGradient id="bubble_grad" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#C084FC" stop-opacity="0.6"/>
+              <stop offset="1" stop-color="#6366F1" stop-opacity="0.8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <p>Start a conversation with {{ agentName }} about this property.</p>
+    </div>
+  </div>
+
+  <div class="chat-footer">
+    <form (ngSubmit)="sendMessage()" class="input-wrapper">
+      <input type="text" 
+             name="newMessage" 
+             [(ngModel)]="newMessage" 
+             placeholder="Type a message..." 
+             autoComplete="off">
+      <button type="submit" [disabled]="!newMessage.trim()" class="send-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="chat-overlay" *ngIf="isOpen" (click)="closeChat()"></div>

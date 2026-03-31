@@ -1,0 +1,45 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Angular
+.angular/
+dist/
+/out-tsc
+/bazel-out
+/coverage
+
+# Backend
+backend/node_modules/
+backend/dist/
+backend/.env
+backend/uploads/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.history/*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+connect.lock
+testem.log
+/typings
+__screenshots__/
+tmp/

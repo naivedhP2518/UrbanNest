@@ -1,0 +1,40 @@
+import { Routes } from '@angular/router';
+import { HomeComponent } from './features/home/home';
+import { LoginComponent } from './features/auth/login/login';
+import { RegisterComponent } from './features/auth/register/register';
+import { PropertiesComponent } from './features/properties/properties';
+import { AgentsComponent } from './features/agents/agents';
+import { PropertyDetailComponent } from './features/properties/property-detail/property-detail';
+import { AboutComponent } from './features/static/about/about';
+import { ContactComponent } from './features/static/contact/contact';
+import { InfoPageComponent } from './features/static/info/info';
+import { AgentDashboardComponent } from './features/agent/dashboard/dashboard';
+import { MyListingsComponent } from './features/agent/my-listings/my-listings';
+import { AddPropertyComponent } from './features/agent/add-property/add-property';
+import { ChatPageComponent } from './features/chat/chat';
+import { ProfileComponent } from './features/profile/profile';
+import { AgentProfileComponent } from './features/agents/agent-profile/agent-profile';
+
+export const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'properties', component: PropertiesComponent },
+  { path: 'properties/:id', component: PropertyDetailComponent },
+  { path: 'agents', component: AgentsComponent },
+  { path: 'agents/:id', component: AgentProfileComponent },
+  { path: 'chat', component: ChatPageComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'privacy', component: InfoPageComponent },
+  { path: 'terms', component: InfoPageComponent },
+  { path: 'careers', component: InfoPageComponent },
+  { path: 'help', component: InfoPageComponent },
+  { path: 'sitemap', component: InfoPageComponent },
+  { path: 'security', component: InfoPageComponent },
+  { path: 'agent/dashboard', component: AgentDashboardComponent },
+  { path: 'agent/my-listings', component: MyListingsComponent },
+  { path: 'agent/add-property', component: AddPropertyComponent },
+  { path: '**', redirectTo: '' },
+];
