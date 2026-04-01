@@ -115,10 +115,11 @@ We invite developers to contribute in the following areas:
 
 | 👤 Developer | Role/Focus |
 | :--- | :--- |
-| **Varun Thacker** | Backend Architecture & Real-time Sync |
-| **Darji Vrund** | Frontend UI & Design System |
-| **Man Patel** | Authentication & Security Logic |
-| **Abhay Maurya** | Property Management & CRUD Services |
+| **Naivedh Patel** | Frontend Architecture & UI Design |
+| **Varun Thacker** | Backend Systems & API Development |
+| **Vrund Darji** | Security Protocols & Data Integrity |
+| **Man Patel** | Authentication & RBAC Implementation |
+| **Abhay Maurya** | Full-Stack Code Review & QA |
 
 </div>
 
