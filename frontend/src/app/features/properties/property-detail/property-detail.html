@@ -1,107 +1,133 @@
-<div class="container py-8" *ngIf="!loading && property">
-  <div class="property-header mb-8">
-    <div class="header-main">
-      <h1 class="text-4xl font-extrabold mb-2">{{ property.title }}</h1>
-      <p class="text-xl text-muted">{{ property.address }}, {{ property.city }}</p>
-    </div>
-    <div class="header-price">
-      <span class="price-label">Price</span>
-      <h2 class="text-4xl font-extrabold color-primary">{{ property.price | currency:'INR' }}</h2>
+<div class="property-detail-page">
+  <div class="container">
+    <button class="btn btn-ghost mb-6" routerLink="/properties">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Properties
+    </button>
+
+    <div *ngIf="loading" class="flex-center py-20"><div class="spinner"></div></div>
+
+    <div *ngIf="!loading && property" class="property-content animate-fade-in-up">
+      <!-- Title & Price Header -->
+      <div class="property-header flex-between mb-8">
+        <div>
+          <div class="badges-row mb-4">
+            <span class="badge primary-badge">For {{ property.type }}</span>
+            <span class="badge status-badge" [class.success]="property.status === 'Available'">{{ property.status }}</span>
+          </div>
+          <h1>{{ property.title }}</h1>
+          <p class="location-text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {{ property.address || '' }} {{ property.city }}, {{ property.state || '' }} {{ property.zipCode || '' }}
+          </p>
+        </div>
+        <div class="price-box">
+          <span class="price">₹{{ property.price.toLocaleString('en-IN') }}</span>
+          <span class="price-note" *ngIf="property.type === 'Rent'">/ month</span>
+        </div>
+      </div>
+
+      <!-- Gallery -->
+      <div class="gallery-grid mb-12" *ngIf="property.images && property.images.length > 0">
+        <div class="gallery-main" (click)="openLightbox(0)">
+          <img [src]="getPropertyImage(property.images[0])" alt="Main View">
+        </div>
+        <div class="gallery-thumbs" *ngIf="property.images.length > 1">
+          <div class="thumb" *ngFor="let img of property.images.slice(1, 5); let i = index" (click)="openLightbox(i + 1)">
+            <img [src]="getPropertyImage(img)" alt="Thumbnail">
+            <div class="more-overlay" *ngIf="i === 3 && property.images.length > 5">
+              <span>+{{ property.images.length - 5 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-placeholder mb-12" *ngIf="!property.images || property.images.length === 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="80" height="80"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+
+      <!-- Main Layout Grid -->
+      <div class="detail-layout">
+        <!-- Left Column -->
+        <div class="detail-main">
+          <!-- Quick Specs -->
+          <div class="quick-specs">
+            <div class="spec-item" *ngIf="property.bedrooms">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v7"/><path d="M20 14v7"/><path d="M4 14h16"/><path d="M4 10a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4z"/><path d="M7 10V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/></svg>
+              <span>{{ property.bedrooms }} Beds</span>
+            </div>
+            <div class="spec-item" *ngIf="property.bathrooms">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><path d="M4 12v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/><path d="M12 4v4"/><path d="M10 6h4"/></svg>
+              <span>{{ property.bathrooms }} Baths</span>
+            </div>
+            <div class="spec-item" *ngIf="property.area">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <span>{{ property.area }} sq.ft.</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="content-section">
+            <h2>About this Property</h2>
+            <div class="description-text">
+              <p>{{ property.description || 'No description provided.' }}</p>
+            </div>
+          </div>
+
+          <!-- Amenities -->
+          <div class="content-section" *ngIf="property.amenities && property.amenities.length > 0">
+            <h2>Features & Amenities</h2>
+            <div class="amenities-grid">
+              <div class="amenity-item" *ngFor="let amenity of property.amenities">
+                <div class="amenity-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span>{{ amenity }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Agent Card -->
+        <div class="detail-sidebar">
+          <div class="agent-contact-card" *ngIf="property.agent">
+            <h3 class="mb-4">Listed By</h3>
+            <div class="agent-info-row mb-6">
+              <div class="agent-avatar">
+                <img [src]="'http://localhost:5000/images/default-agent.png'" [alt]="property.agent.name">
+              </div>
+              <div class="agent-name">
+                <a [routerLink]="['/agents', property.agent._id]">{{ property.agent.name }}</a>
+                <span class="role">UrbanNest Agent</span>
+              </div>
+            </div>
+
+            <a [routerLink]="['/chat']" class="btn btn-primary btn-block mb-3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Message Agent
+            </a>
+            
+            <a [routerLink]="['/agents', property.agent._id]" class="btn btn-outline btn-block">
+              View Agent Profile
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="property-gallery mb-8" [class.single-image]="!property.images || property.images.length <= 1">
-    <div class="main-image" (click)="openLightbox(0)">
-      <img [src]="property.images[0] || 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'" alt="Property Main Image">
-    </div>
-    
-    <div class="side-images" *ngIf="property.images && property.images.length > 1">
-      <div class="side-image top" (click)="openLightbox(1)">
-        <img [src]="property.images[1] || property.images[0]" alt="Property Image 2">
-      </div>
-      <div class="side-image bottom" (click)="openLightbox(2)">
-        <img [src]="property.images[2] || property.images[0]" alt="Property Image 3">
-        
-        <div class="more-images-overlay" *ngIf="property.images.length > 3">
-          <span class="overlay-count">+{{ property.images.length - 3 }}</span>
-          <span class="overlay-text">More Photos</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="property-content-grid">
-    <div class="main-content">
-      <section class="mb-8">
-        <h3 class="section-title">Description</h3>
-        <p class="text-lg leading-relaxed">{{ property.description }}</p>
-      </section>
-
-      <section class="mb-8">
-        <h3 class="section-title">Amenities</h3>
-        <div class="amenities-grid">
-          <div *ngFor="let amenity of property.amenities" class="amenity-item">
-            <span class="amenity-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </span> {{ amenity }}
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <aside class="sidebar">
-      <div class="agent-card-sticky">
-        <h3 class="section-title">Contact Agent</h3>
-        <div class="agent-info-box">
-          <div class="agent-avatar-small">
-            <img [src]="property.agent.avatar ? (property.agent.avatar.startsWith('http') ? property.agent.avatar : 'http://localhost:5000' + property.agent.avatar) : 'assets/default-avatar.png'" [alt]="property.agent.name">
-          </div>
-          <div>
-            <h4 class="font-bold">{{ property.agent.name }}</h4>
-            <p class="text-xs text-muted">Luxury Property Advisor</p>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-block" (click)="isChatOpen = true">Send Message</button>
-        <br><br>
-        <a routerLink="/agents" class="btn btn-outline btn-block mt-2">View Profile</a>
-      </div>
-    </aside>
-  </div>
-</div>
-
-<app-chat *ngIf="property" 
-          [propertyId]="property._id!" 
-          [agentId]="property.agent._id!" 
-          [agentName]="property.agent.name"
-          [isOpen]="isChatOpen"
-          (close)="isChatOpen = false">
-</app-chat>
-
-<div *ngIf="loading" class="flex-center py-40">
-  <div class="spinner"></div>
-</div>
-
-<!-- Image Lightbox -->
-<div class="lightbox" *ngIf="isLightboxOpen && property && property.images" (click)="closeLightbox()">
-  <button class="lightbox-close" (click)="closeLightbox()">
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-  </button>
-  
-  <div class="lightbox-content" (click)="$event.stopPropagation()">
-    <img [src]="property.images[currentImageIndex]" alt="Property Image Fullscreen" class="lightbox-image">
-    
-    <div class="lightbox-controls" *ngIf="property.images.length > 1">
-      <button class="lightbox-nav prev" (click)="prevImage($event)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-      
-      <div class="lightbox-counter">
-        {{ currentImageIndex + 1 }} / {{ property.images.length }}
-      </div>
-      
-      <button class="lightbox-nav next" (click)="nextImage($event)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
-    </div>
+  <!-- Fullscreen Lightbox -->
+  <div class="lightbox" *ngIf="isLightboxOpen && property && property.images">
+    <button class="btn-close" (click)="closeLightbox()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <button class="nav-btn prev" (click)="prevImage($event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <img [src]="getPropertyImage(property.images[currentImageIndex])" alt="Fullscreen View">
+    <button class="nav-btn next" (click)="nextImage($event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="counter">{{ currentImageIndex + 1 }} / {{ property.images.length }}</div>
   </div>
 </div>

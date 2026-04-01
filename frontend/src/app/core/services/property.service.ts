@@ -10,7 +10,12 @@ export interface Property {
   price: number;
   address: string;
   city: string;
+  state?: string;
+  zipCode?: string;
   type: 'Sale' | 'Rent';
+  bedrooms?: number;
+  bathrooms?: number;
+  area?: number;
   amenities: string[];
   images: string[];
   agent: {

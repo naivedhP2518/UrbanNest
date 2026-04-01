@@ -76,6 +76,14 @@ const updateUserProfile = async (req, res) => {
       user.bio = req.body.bio !== undefined ? req.body.bio : user.bio;
       user.experience = req.body.experience !== undefined ? req.body.experience : user.experience;
       user.happyClients = req.body.happyClients !== undefined ? req.body.happyClients : user.happyClients;
+      user.phone = req.body.phone !== undefined ? req.body.phone : user.phone;
+      
+      if (req.body.role) {
+        user.role = req.body.role;
+      }
+      if (req.body.profileCompleted) {
+        user.profileCompleted = req.body.profileCompleted;
+      }
 
       if (req.body.password) {
         user.password = req.body.password;
@@ -94,7 +102,9 @@ const updateUserProfile = async (req, res) => {
           avatar: updatedUser.avatar,
           bio: updatedUser.bio,
           experience: updatedUser.experience,
-          happyClients: updatedUser.happyClients
+          happyClients: updatedUser.happyClients,
+          phone: updatedUser.phone,
+          profileCompleted: updatedUser.profileCompleted
         },
       });
     } else {

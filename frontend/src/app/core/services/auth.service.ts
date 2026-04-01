@@ -11,6 +11,8 @@ export interface User {
   bio?: string;
   experience?: number;
   happyClients?: number;
+  phone?: string;
+  profileCompleted?: boolean;
 }
 
 export interface AuthResponse {

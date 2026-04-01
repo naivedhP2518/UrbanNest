@@ -2,12 +2,11 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PropertyService, Property } from '../../../core/services/property.service';
-import { ChatComponent } from '../../chat/chat.component';
 
 @Component({
   selector: 'app-property-detail',
   standalone: true,
-  imports: [CommonModule, ChatComponent, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './property-detail.html',
   styleUrl: './property-detail.css'
 })
@@ -79,6 +78,11 @@ export class PropertyDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  getPropertyImage(img: string): string {
+    if (!img) return 'assets/modern-home.png';
+    return img.startsWith('http') ? img : `http://localhost:5000${img}`;
   }
 }
 

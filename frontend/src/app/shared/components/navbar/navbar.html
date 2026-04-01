@@ -1,103 +1,106 @@
-<nav class="navbar">
+<nav class="navbar" [class.scrolled]="isScrolled">
   <div class="container nav-content">
     <a routerLink="/" class="logo">
-      <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 9.5L12 3L21 9.5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V9.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span class="logo-text">Real<span class="accent">Estate</span></span>
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3L3 10V20C3 20.55 3.45 21 4 21H9V14H15V21H20C20.55 21 21 20.55 21 20V10L12 3Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <span class="logo-text">Urban<span class="logo-accent">Nest</span></span>
     </a>
 
-    <ul class="nav-links">
+    <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen">
       <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
           Home
         </a>
       </li>
       <li>
-        <a routerLink="/properties" routerLinkActive="active">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 21h18"></path>
-            <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
-            <path d="M9 7h6"></path>
-            <path d="M9 11h6"></path>
-            <path d="M9 15h6"></path>
-          </svg>
+        <a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">
           Properties
         </a>
       </li>
       <li>
-        <a routerLink="/agents" routerLinkActive="active">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
+        <a routerLink="/agents" routerLinkActive="active" (click)="closeMobileMenu()">
           Agents
         </a>
       </li>
       <li *ngIf="authService.isLoggedIn()">
-        <a routerLink="/chat" routerLinkActive="active">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z"/>
-          </svg>
+        <a routerLink="/chat" routerLinkActive="active" (click)="closeMobileMenu()">
           Chat
         </a>
       </li>
       <li *ngIf="authService.currentUser()?.role === 'agent' || authService.currentUser()?.role === 'admin'">
-        <a routerLink="/agent/dashboard" routerLinkActive="active">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="9"></rect>
-            <rect x="14" y="3" width="7" height="5"></rect>
-            <rect x="14" y="12" width="7" height="9"></rect>
-            <rect x="3" y="16" width="7" height="5"></rect>
-          </svg>
+        <a routerLink="/agent/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">
           Dashboard
         </a>
+      </li>
+
+      <!-- Mobile-only auth buttons -->
+      <li class="mobile-auth" *ngIf="!authService.isLoggedIn()">
+        <a routerLink="/login" class="btn btn-outline btn-sm btn-block" (click)="closeMobileMenu()">Log In</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm btn-block" (click)="closeMobileMenu()">Sign Up</a>
       </li>
     </ul>
 
     <div class="nav-actions">
       <ng-container *ngIf="!authService.isLoggedIn(); else userMenu">
-        <a routerLink="/login" class="btn btn-outline login-btn">Log In</a>
-        <a routerLink="/register" class="btn btn-primary">Sign Up</a>
+        <a routerLink="/login" class="btn-login">Log In</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm">Sign Up</a>
       </ng-container>
       
       <ng-template #userMenu>
         <div class="user-profile-container">
           <button class="user-profile-btn" (click)="toggleMenu()" [class.active]="isMenuOpen">
-            <div class="user-avatar-container">
-              <img [src]="authService.getAvatarUrl()" alt="Profile" class="user-avatar-img" />
+            <div class="user-avatar">
+              <img [src]="authService.getAvatarUrl()" alt="Profile" />
             </div>
-            <div class="user-info-dropdown-trigger">
+            <div class="user-meta">
               <span class="user-name">{{ authService.currentUser()?.name }}</span>
               <span class="user-role" *ngIf="authService.currentUser()?.role !== 'user'">{{ authService.currentUser()?.role }}</span>
             </div>
+            <svg class="chevron" [class.open]="isMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
 
-          <!-- Dropdown Menu -->
-          <div class="profile-dropdown-menu" *ngIf="isMenuOpen">
+          <div class="profile-dropdown" *ngIf="isMenuOpen">
             <div class="dropdown-header">
-              <p class="dropdown-name">{{ authService.currentUser()?.name }}</p>
-              <p class="dropdown-email">{{ authService.currentUser()?.email }}</p>
+              <div class="dropdown-avatar">
+                <img [src]="authService.getAvatarUrl()" alt="Profile" />
+              </div>
+              <div>
+                <p class="dropdown-name">{{ authService.currentUser()?.name }}</p>
+                <p class="dropdown-email">{{ authService.currentUser()?.email }}</p>
+              </div>
             </div>
             <div class="dropdown-divider"></div>
             <a routerLink="/profile" class="dropdown-item" (click)="isMenuOpen = false">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              Edit Profile
+              My Profile
             </a>
+            <a routerLink="/chat" class="dropdown-item" (click)="isMenuOpen = false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Messages
+            </a>
+            <div class="dropdown-divider"></div>
             <button (click)="logout()" class="dropdown-item text-danger">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-              Logout
+              Sign Out
             </button>
           </div>
         </div>
       </ng-template>
+
+      <!-- Mobile hamburger -->
+      <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- Mobile overlay -->
+<div class="mobile-overlay" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()"></div>

@@ -19,9 +19,14 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Please add a password'],
+      required: function() { return !this.googleId; }, // not required if user logs in via Google
       minlength: 6,
       select: false, // Don't return password by default
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true // allows multiple users with null googleId
     },
     role: {
       type: String,
@@ -43,6 +48,14 @@ const userSchema = mongoose.Schema(
     happyClients: {
       type: Number,
       default: 0
+    },
+    phone: {
+      type: String,
+      default: ''
+    },
+    profileCompleted: {
+      type: Boolean,
+      default: false
     },
     createdAt: {
       type: Date,

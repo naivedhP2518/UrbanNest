@@ -1,0 +1,142 @@
+<div class="add-property-page">
+  <div class="container-md">
+    <div class="form-header text-center mb-12">
+      <h1 class="text-4xl font-extrabold">List Internal <span class="text-gradient">Property</span></h1>
+      <p class="text-muted mt-2">Fill in the details below to publish your property to the marketplace.</p>
+    </div>
+
+    <div class="form-container">
+      <form (ngSubmit)="onSubmit()" #propForm="ngForm">
+        <div class="form-sections">
+          <!-- Basic Info -->
+          <section class="form-section animate-fade-in-up">
+            <h3 class="section-title">
+              <span class="step-num">1</span> Basic Information
+            </h3>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label>Property Title <span class="required">*</span></label>
+                <input type="text" name="title" [(ngModel)]="property.title" required placeholder="e.g., Modern Villa with Infinity Pool">
+              </div>
+              <div class="form-group">
+                <label>Price (₹) <span class="required">*</span></label>
+                <input type="number" name="price" [(ngModel)]="property.price" required placeholder="0.00" min="0">
+              </div>
+              <div class="form-group">
+                <label>Listing Type <span class="required">*</span></label>
+                <select name="type" [(ngModel)]="property.type" required>
+                  <option value="Sale">For Sale</option>
+                  <option value="Rent">For Rent</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Bedrooms</label>
+                <input type="number" name="bedrooms" [(ngModel)]="property.bedrooms" placeholder="e.g., 3" min="0">
+              </div>
+              <div class="form-group">
+                <label>Bathrooms</label>
+                <input type="number" name="bathrooms" [(ngModel)]="property.bathrooms" placeholder="e.g., 2" min="0">
+              </div>
+              <div class="form-group">
+                <label>Area (sq.ft)</label>
+                <input type="number" name="area" [(ngModel)]="property.area" placeholder="e.g., 1500" min="0">
+              </div>
+            </div>
+          </section>
+
+          <!-- Location & Description -->
+          <section class="form-section mt-12 animate-fade-in-up delay-1">
+            <h3 class="section-title">
+              <span class="step-num">2</span> Location & Details
+            </h3>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label>Full Address <span class="required">*</span></label>
+                <input type="text" name="address" [(ngModel)]="property.address" required placeholder="123 Luxury Way, Area Name">
+              </div>
+              <div class="form-group">
+                <label>City <span class="required">*</span></label>
+                <input type="text" name="city" [(ngModel)]="property.city" required placeholder="City Name">
+              </div>
+              <div class="form-group">
+                <label>State / Region</label>
+                <input type="text" name="state" [(ngModel)]="property.state" placeholder="State">
+              </div>
+              <div class="form-group full-width">
+                <label>Description <span class="required">*</span></label>
+                <textarea name="description" [(ngModel)]="property.description" rows="5" required placeholder="Describe the key features and selling points..."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Media & Amenities -->
+          <section class="form-section mt-12 animate-fade-in-up delay-2">
+            <h3 class="section-title">
+              <span class="step-num">3</span> Media & Amenities
+            </h3>
+            
+            <!-- Upload container -->
+            <div class="media-upload-container mb-8">
+              <label class="d-block font-bold mb-3">Property Images (Max 5)</label>
+              
+              <div class="upload-dropzone" 
+                   (dragover)="onDragOver($event)" 
+                   (dragleave)="onDragLeave($event)" 
+                   (drop)="onDrop($event)"
+                   [class.dragging]="isDragging"
+                   (click)="fileInput.click()">
+                <div class="upload-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="upload-text">
+                  <p class="main-text">Click or Drag & Drop images here</p>
+                  <p class="sub-text">Recommended: 1200x800px, JPG/PNG</p>
+                </div>
+                <!-- Add accept="image/png, image/jpeg, image/webp" -->
+                <input type="file" #fileInput (change)="onFileSelected($event)" multiple accept="image/png, image/jpeg, image/webp" hidden>
+              </div>
+
+              <!-- Preview Grid -->
+              <div class="preview-grid mt-6" *ngIf="previews.length > 0">
+                <div class="preview-card" *ngFor="let preview of previews; let i = index">
+                  <img [src]="preview" alt="Preview">
+                  <button type="button" class="remove-btn" (click)="removeImage(i)" title="Remove Image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                  <div class="upload-progress" *ngIf="uploading && i >= uploadedCount">
+                    <div class="progress-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Amenities -->
+            <div class="amenities-selection">
+              <label class="d-block font-bold mb-3">Amenities</label>
+              <div class="amenities-grid">
+                <label class="amenity-checkbox" *ngFor="let a of availableAmenities">
+                  <input type="checkbox" [value]="a" (change)="toggleAmenity(a)" [checked]="property.amenities.includes(a)">
+                  <span class="checkbox-custom">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                  <span class="amenity-label">{{ a }}</span>
+                </label>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="form-actions mt-12 pt-8 border-t">
+          <button type="button" class="btn btn-outline btn-lg" routerLink="/agent/my-listings">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="!propForm.valid || loading || uploading">
+            <span *ngIf="!loading && !uploading">Publish Property</span>
+            <span *ngIf="loading || uploading" class="flex-center gap-2">
+              <span class="spinner inline"></span>
+              {{ uploading ? 'Uploading Images...' : 'Publishing...' }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -17,6 +17,11 @@ export class LoginComponent implements AfterViewInit {
   credentials = { email: '', password: '' };
   error: string | null = null;
   loading = false;
+  showPassword = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   constructor(
     private authService: AuthService,
@@ -34,7 +39,7 @@ export class LoginComponent implements AfterViewInit {
       if (typeof google !== 'undefined' && google.accounts) {
         clearInterval(checkGoogle);
         google.accounts.id.initialize({
-          client_id: 'YOUR_GOOGLE_CLIENT_ID',
+          client_id: '1048335885083-oonol28cfa74bridh9n3c0f9fcq0obi3.apps.googleusercontent.com',
           callback: (response: any) => this.handleGoogleResponse(response),
         });
         google.accounts.id.renderButton(
@@ -60,7 +65,13 @@ export class LoginComponent implements AfterViewInit {
       this.loading = true;
       this.error = null;
       this.authService.googleLogin(response.credential).subscribe({
-        next: () => this.router.navigate(['/']),
+        next: (res) => {
+          if (res.user && !res.user.profileCompleted) {
+            this.router.navigate(['/complete-profile']);
+          } else {
+            this.router.navigate(['/']);
+          }
+        },
         error: (err) => {
           this.error =
             err.error?.message || 'Google sign-in failed. Please try again.';
@@ -74,7 +85,13 @@ export class LoginComponent implements AfterViewInit {
     this.loading = true;
     this.error = null;
     this.authService.login(this.credentials).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: (res) => {
+        if (res.user && !res.user.profileCompleted) {
+          this.router.navigate(['/complete-profile']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
       error: (err) => {
         this.error = err.error?.message || 'Login failed. Please try again.';
         this.loading = false;

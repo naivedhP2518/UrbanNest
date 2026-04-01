@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, NgZone, HostListener, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -15,20 +15,15 @@ declare const google: any;
 })
 export class RegisterComponent implements AfterViewInit {
   userData = { name: '', email: '', password: '', role: 'user' };
+  confirmPassword = '';
   error: string | null = null;
   loading = false;
-
-  isDropdownOpen = false;
-  roles = [
-    { value: 'user', label: 'Looking to Buy/Rent' },
-    { value: 'agent', label: 'Real Estate Agent' },
-    { value: 'admin', label: 'Administrator' },
-  ];
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private eRef: ElementRef,
     private ngZone: NgZone
   ) {}
 
@@ -66,47 +61,47 @@ export class RegisterComponent implements AfterViewInit {
       this.loading = true;
       this.error = null;
       this.authService.googleLogin(response.credential).subscribe({
-        next: () => this.router.navigate(['/']),
+        next: (res) => {
+          if (res.user && !res.user.profileCompleted) {
+            this.router.navigate(['/complete-profile']);
+          } else {
+            this.router.navigate(['/']);
+          }
+        },
         error: (err) => {
-          this.error =
-            err.error?.message || 'Google sign-up failed. Please try again.';
+          this.error = err.error?.message || 'Google sign-up failed. Please try again.';
           this.loading = false;
         },
       });
     });
   }
 
-  @HostListener('document:click', ['$event'])
-  clickout(event: Event) {
-    if (!this.eRef.nativeElement.contains(event.target)) {
-      this.isDropdownOpen = false;
-    }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
-  selectRole(role: string) {
-    this.userData.role = role;
-    this.isDropdownOpen = false;
-  }
-
-  getSelectedRoleLabel() {
-    return (
-      this.roles.find((r) => r.value === this.userData.role)?.label ||
-      'Select Role'
-    );
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit() {
+    if (this.userData.password !== this.confirmPassword) {
+      this.error = 'Passwords do not match';
+      return;
+    }
+
     this.loading = true;
     this.error = null;
     this.authService.register(this.userData).subscribe({
-      next: () => this.router.navigate(['/']),
+      next: (res) => {
+        if (res.user && !res.user.profileCompleted) {
+          this.router.navigate(['/complete-profile']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
       error: (err) => {
-        this.error =
-          err.error?.message || 'Registration failed. Please try again.';
+        this.error = err.error?.message || 'Registration failed. Please try again.';
         this.loading = false;
       },
     });

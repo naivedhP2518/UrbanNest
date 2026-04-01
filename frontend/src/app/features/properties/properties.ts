@@ -100,5 +100,13 @@ export class PropertiesComponent implements OnInit {
   applyFilters(): void {
     this.loadProperties();
   }
+
+  getPropertyImage(property: Property): string {
+    if (property.images && property.images.length > 0) {
+      const img = property.images[0];
+      return img.startsWith('http') ? img : `http://localhost:5000${img}`;
+    }
+    return 'assets/modern-home.png';
+  }
 }
 

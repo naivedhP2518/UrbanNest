@@ -1,6 +1,10 @@
 const User = require('../models/User');
 const Admin = require('../models/Admin');
 const generateToken = require('../utils/generateToken');
+const { OAuth2Client } = require('google-auth-library');
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 // @desc    Register a new user or admin
 // @route   POST /api/auth/register
@@ -32,6 +36,7 @@ const registerUser = async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          profileCompleted: user.profileCompleted,
         },
       });
     } else {
@@ -67,6 +72,7 @@ const loginUser = async (req, res) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          profileCompleted: user.profileCompleted || true,
         },
       });
     } else {
@@ -77,7 +83,57 @@ const loginUser = async (req, res) => {
   }
 };
 
+// @desc    Google OAuth Login/Signup
+// @route   POST /api/auth/google
+// @access  Public
+const googleLogin = async (req, res) => {
+  const { credential, role } = req.body;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name, picture } = payload;
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+      if (!user.googleId) {
+        user.googleId = googleId;
+        await user.save();
+      }
+    } else {
+      user = await User.create({
+        name,
+        email,
+        googleId,
+        avatar: picture,
+        role: role || 'user',
+        profileCompleted: false
+      });
+    }
+
+    res.json({
+      success: true,
+      token: generateToken(user._id, user.role),
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        profileCompleted: user.profileCompleted
+      },
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  googleLogin,
 };

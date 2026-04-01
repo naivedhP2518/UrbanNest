@@ -1,49 +1,42 @@
-<div class="container py-12">
-  <div class="section-header">
-    <h1 class="section-title">Meet Our Expert Agents</h1>
-    <p class="section-subtitle">Professional agents ready to help you find your dream home.</p>
-    <div class="header-accent"></div>
-  </div>
+<div class="agents-page">
+  <div class="container">
+    <div class="page-hero">
+      <h1>Our <span class="text-gradient">Expert Agents</span></h1>
+      <p>Connect with experienced professionals who will guide you through your real estate journey</p>
+    </div>
 
-  <div *ngIf="loading" class="flex-center py-20">
-    <div class="spinner"></div>
-  </div>
+    <div *ngIf="loading" class="flex-center py-20"><div class="spinner"></div></div>
 
-  <div class="agent-grid" *ngIf="!loading">
-    <div *ngFor="let agent of agents" class="agent-card">
-      <div class="agent-header">
-        <span class="status-badge">Available</span>
-        <div class="agent-avatar-container">
-          <div class="avatar-ring"></div>
-          <img [src]="authService.getAvatarUrl(agent.avatar)" 
-               [alt]="agent.name" 
-               class="agent-img">
+    <div class="agents-grid" *ngIf="!loading && agents.length > 0">
+      <div class="agent-card" *ngFor="let agent of agents" [routerLink]="['/agents', agent._id]">
+        <div class="agent-avatar-wrapper">
+          <img [src]="authService.getAvatarUrl(agent.avatar)" [alt]="agent.name">
         </div>
-      </div>
-      
-      <div class="agent-body">
-        <div class="badge-row">
-          <span class="verified-badge">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Verified
-          </span>
-          <span class="rating-badge">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            4.9
-          </span>
+        <div class="agent-info">
+          <h3>{{ agent.name }}</h3>
+          <span class="agent-role-tag">Real Estate Agent</span>
+          <p class="agent-bio" *ngIf="agent.bio">{{ agent.bio }}</p>
+          <div class="agent-stats">
+            <div class="agent-stat" *ngIf="agent.experience">
+              <span class="stat-val">{{ agent.experience }}</span>
+              <span class="stat-lbl">Yrs Exp</span>
+            </div>
+            <div class="agent-stat" *ngIf="agent.happyClients">
+              <span class="stat-val">{{ agent.happyClients }}</span>
+              <span class="stat-lbl">Clients</span>
+            </div>
+          </div>
         </div>
-        
-        <h3 class="agent-name">{{ agent.name }}</h3>
-        <p class="agent-role">Expert Real Estate Consultant</p>
-        
-        <div class="agent-bio">
-          Specialize in luxury residential properties and commercial investments.
-        </div>
-
         <div class="agent-actions">
-          <button class="primary-btn" [routerLink]="['/agents', agent._id]">View Profile</button>
+          <button class="btn btn-primary btn-sm">View Profile</button>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="!loading && agents.length === 0" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="56" height="56"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <h3>No agents found</h3>
+      <p>Check back soon for new agents</p>
     </div>
   </div>
 </div>

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home';
 import { LoginComponent } from './features/auth/login/login';
 import { RegisterComponent } from './features/auth/register/register';
+import { CompleteProfileComponent } from './features/auth/complete-profile/complete-profile';
 import { PropertiesComponent } from './features/properties/properties';
 import { AgentsComponent } from './features/agents/agents';
 import { PropertyDetailComponent } from './features/properties/property-detail/property-detail';
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'complete-profile', component: CompleteProfileComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'properties', component: PropertiesComponent },
   { path: 'properties/:id', component: PropertyDetailComponent },

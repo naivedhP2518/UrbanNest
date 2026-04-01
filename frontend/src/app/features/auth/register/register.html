@@ -1,65 +1,102 @@
-<div class="auth-wrapper">
-  <div class="auth-card">
-    <div class="auth-header">
-      <h2>Create Account</h2>
-      <p>Join our community of real estate professionals</p>
-    </div>
-
-    <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="auth-form">
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" [(ngModel)]="userData.name" required placeholder="John Doe">
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" [(ngModel)]="userData.email" required placeholder="name@example.com">
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" [(ngModel)]="userData.password" required minlength="6" placeholder="••••••••">
-      </div>
-
-      <div class="form-group dropdown-container">
-        <label>Sign up as</label>
-        <div class="custom-dropdown glass" (click)="toggleDropdown()">
-          <span class="selected-value">{{ getSelectedRoleLabel() }}</span>
-          <svg class="dropdown-chevron" [class.open]="isDropdownOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+<div class="auth-page">
+  <div class="auth-brand">
+    <div class="brand-content">
+      <a routerLink="/" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3L3 10V20C3 20.55 3.45 21 4 21H9V14H15V21H20C20.55 21 21 20.55 21 20V10L12 3Z" fill="currentColor"/></svg>
         </div>
-        <div class="dropdown-menu glass" *ngIf="isDropdownOpen">
-          <div class="dropdown-item" *ngFor="let r of roles" (click)="selectRole(r.value)" [class.active]="userData.role === r.value">
-            <span class="role-icon">
-              <svg *ngIf="r.value === 'user'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              <svg *ngIf="r.value === 'agent'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-              <svg *ngIf="r.value === 'admin'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </span>
-            <span class="role-label">{{ r.label }}</span>
+        <span>Urban<span class="accent">Nest</span></span>
+      </a>
+      <h1>Join UrbanNest</h1>
+      <p>Create your account and start exploring premium properties, connecting with agents, and finding your dream home.</p>
+      <div class="brand-features">
+        <div class="brand-feature">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Free to use, forever</span>
+        </div>
+        <div class="brand-feature">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Your data is always secure</span>
+        </div>
+        <div class="brand-feature">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Thousands of premium listings</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-panel">
+    <div class="auth-form-wrapper">
+      <div class="auth-form-header">
+        <h2>Create Account</h2>
+        <p>Fill in your details to get started</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="auth-form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input type="text" id="name" name="name" [(ngModel)]="userData.name" required placeholder="John Doe">
           </div>
         </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <input type="email" id="email" name="email" [(ngModel)]="userData.email" required placeholder="name@example.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="userData.password" required minlength="6" placeholder="Min 6 characters">
+            <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+              <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg *ngIf="showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required placeholder="Re-enter password">
+            <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+              <svg *ngIf="!showConfirmPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg *ngIf="showConfirmPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <p class="field-error" *ngIf="confirmPassword && userData.password !== confirmPassword">Passwords do not match</p>
+        </div>
+
+        <div *ngIf="error" class="error-message">{{ error }}</div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="!registerForm.valid || loading || userData.password !== confirmPassword">
+          <span *ngIf="!loading">Create Account</span>
+          <span *ngIf="loading" class="btn-loading">
+            <span class="btn-spinner"></span>
+            Creating Account...
+          </span>
+        </button>
+      </form>
+
+      <div class="auth-divider">
+        <span>or continue with</span>
       </div>
 
-      <div *ngIf="error" class="error-message">
-        {{ error }}
+      <div class="google-btn-wrapper">
+        <div id="google-signup-btn"></div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block" [disabled]="!registerForm.valid || loading">
-        {{ loading ? 'Creating Account...' : 'Get Started' }}
-      </button>
-    </form>
-
-    <div class="divider">
-      <span>or</span>
-    </div>
-
-    <div class="google-btn-wrapper">
-      <div id="google-signup-btn"></div>
-    </div>
-
-    <div class="auth-footer">
-      <p>Already have an account? <a routerLink="/login">Log in here</a></p>
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+      </div>
     </div>
   </div>
 </div>
