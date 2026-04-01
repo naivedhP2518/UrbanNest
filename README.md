@@ -103,9 +103,9 @@ npm start
 UrbanNest is built on the principles of **scalable architecture** and **clean code**. We follow the *Single Responsibility Principle* and *DRY* patterns to maintain a professional codebase.
 
 We invite developers to contribute in the following areas:
-- [ ] UI/UX Enhancements for the Property Dashboard
-- [ ] Performance Optimization for Real-time Websockets
-- [ ] Unit Testing coverage for Core services
+- 🎨 UI/UX Enhancements for the Property Dashboard
+- 🚀 Performance Optimization for Real-time Websockets
+- 🧪 Unit Testing coverage for Core services
 
 ---
 
@@ -126,5 +126,5 @@ We invite developers to contribute in the following areas:
 ---
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Designed_with_❤️_by_UrbanNest_Team-blue?style=for-the-badge" />
+  Developed with ❤️ by the UrbanNest Team
 </div>
