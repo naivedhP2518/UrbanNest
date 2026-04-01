@@ -6,7 +6,7 @@
     </div>
 
     <div class="form-container">
-      <form (ngSubmit)="onSubmit()" #propForm="ngForm">
+      <form (ngSubmit)="onSubmit(propForm)" #propForm="ngForm">
         <div class="form-sections">
           <!-- Basic Info -->
           <section class="form-section animate-fade-in-up">
@@ -128,7 +128,7 @@
 
         <div class="form-actions mt-12 pt-8 border-t">
           <button type="button" class="btn btn-outline btn-lg" routerLink="/agent/my-listings">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-lg" [disabled]="!propForm.valid || loading || uploading">
+          <button type="button" class="btn btn-primary btn-lg" [disabled]="loading || uploading" (click)="onSubmit(propForm)">
             <span *ngIf="!loading && !uploading">Publish Property</span>
             <span *ngIf="loading || uploading" class="flex-center gap-2">
               <span class="spinner inline"></span>

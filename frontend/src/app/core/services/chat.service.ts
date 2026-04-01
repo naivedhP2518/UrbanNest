@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { io, Socket } from 'socket.io-client';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
@@ -48,7 +48,7 @@ export class ChatService {
   public conversations$ = this.conversationsSubject.asObservable();
   public typing$ = this.typingSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private zone: NgZone) {}
 
   // Initialize socket connection
   connect(token: string) {
@@ -59,18 +59,24 @@ export class ChatService {
     });
 
     this.socket.on('newMessage', ({ conversationId, message }: any) => {
-      const currentMessages = this.messagesSubject.value;
-      // Update local message list if currently viewing this conversation
-      if (message.conversation === conversationId) {
-        this.messagesSubject.next([...currentMessages, message]);
-      }
-      
-      // Also refresh conversations to update sidebar previews
-      this.loadConversations();
+      this.zone.run(() => {
+        const currentMessages = this.messagesSubject.value;
+        const msgConvId = typeof message.conversation === 'object' ? message.conversation._id : message.conversation;
+        
+        // Update local message list if currently viewing this conversation
+        if (msgConvId === conversationId) {
+          this.messagesSubject.next([...currentMessages, message]);
+        }
+        
+        // Also refresh conversations to update sidebar previews
+        this.loadConversations();
+      });
     });
 
     this.socket.on('displayTyping', (data: any) => {
-      this.typingSubject.next(data);
+      this.zone.run(() => {
+        this.typingSubject.next(data);
+      });
     });
   }
 

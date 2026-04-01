@@ -102,10 +102,10 @@
               </div>
             </div>
 
-            <a [routerLink]="['/chat']" class="btn btn-primary btn-block mb-3">
+            <button [routerLink]="['/chat']" [queryParams]="{ agentId: property.agent._id }" class="btn btn-primary btn-block mb-3">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Message Agent
-            </a>
+            </button>
             
             <a [routerLink]="['/agents', property.agent._id]" class="btn btn-outline btn-block">
               View Agent Profile

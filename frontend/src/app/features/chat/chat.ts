@@ -149,6 +149,8 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
       const content = this.newMessage;
       this.newMessage = '';
 
+      const senderId = this.currentUser.id || this.currentUser._id;
+
       if (this.activeConversation._id.startsWith('new_')) {
         const participantId = this.activeConversation._id.split('_')[1];
         
@@ -159,7 +161,7 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
               const newConv = res.data;
               this.activeConversation = newConv;
               this.chatService.joinConversation(newConv._id);
-              this.chatService.sendMessage(newConv._id, this.currentUser.id, content);
+              this.chatService.sendMessage(newConv._id, senderId, content);
               this.chatService.loadConversations();
             }
           }
@@ -168,7 +170,7 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
         // Normal conversation
         this.chatService.sendMessage(
           this.activeConversation._id,
-          this.currentUser.id,
+          senderId,
           content
         );
         this.chatService.emitStopTyping(this.activeConversation._id);
@@ -183,8 +185,9 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   getOtherParticipant(conversation: Conversation) {
+    const currentId = this.currentUser?.id || this.currentUser?._id;
     return conversation.participants.find(
-      (p) => p._id !== this.currentUser?.id
+      (p) => p._id !== currentId
     );
   }
 

@@ -28,7 +28,8 @@
           </div>
         </div>
         <div class="agent-actions">
-          <button class="btn btn-primary btn-sm">View Profile</button>
+          <button class="btn btn-outline btn-sm" [routerLink]="['/agents', agent._id]">View Profile</button>
+          <button class="btn btn-primary btn-sm" [routerLink]="['/chat']" [queryParams]="{ agentId: agent._id }" (click)="$event.stopPropagation()">Message</button>
         </div>
       </div>
     </div>

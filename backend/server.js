@@ -88,8 +88,9 @@ io.on('connection', (socket) => {
         conversationId, 
         message: populatedMessage 
       });
+      console.log('Socket Message successfully saved and emitted:', populatedMessage._id);
     } catch (err) {
-      console.error('Socket Message Error:', err);
+      console.error('Socket Message Error Details:', err.stack);
     }
   });
 

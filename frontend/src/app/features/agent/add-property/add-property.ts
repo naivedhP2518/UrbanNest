@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PropertyService } from '../../../core/services/property.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-add-property',
@@ -82,7 +83,16 @@ export class AddPropertyComponent {
     }
   }
 
-  async onSubmit() {
+  async onSubmit(propForm: any) {
+    if (propForm && !propForm.valid) {
+      alert("Please fill out all required fields marked with * (Title, Price, Type, Address, City, Description).");
+      Object.keys(propForm.controls).forEach(field => {
+        const control = propForm.controls[field];
+        control.markAsTouched({ onlySelf: true });
+      });
+      return;
+    }
+
     this.loading = true;
     
     try {
@@ -92,9 +102,9 @@ export class AddPropertyComponent {
         const formData = new FormData();
         this.files.forEach(file => formData.append('images', file));
         
-        const uploadRes = await this.propertyService.uploadImages(formData).toPromise();
+        const uploadRes: any = await firstValueFrom(this.propertyService.uploadImages(formData));
         if (uploadRes?.success) {
-          this.property.images = uploadRes.data.map(path => `http://localhost:5000${path}`);
+          this.property.images = uploadRes.data.map((path: string) => `http://localhost:5000${path}`);
         }
         this.uploading = false;
       }

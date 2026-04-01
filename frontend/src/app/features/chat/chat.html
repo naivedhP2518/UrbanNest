@@ -54,7 +54,9 @@
         <!-- Messages -->
         <div class="messages-area" #messagesContainer>
           <div class="messages-list">
-            <div class="message" *ngFor="let msg of messages" [class.sent]="msg.sender._id === currentUser?.id" [class.received]="msg.sender._id !== currentUser?.id">
+            <div class="message" *ngFor="let msg of messages" 
+                 [class.sent]="msg.sender?._id === (currentUser?.id || currentUser?._id)" 
+                 [class.received]="msg.sender?._id !== (currentUser?.id || currentUser?._id)">
               <div class="msg-bubble">
                 <p>{{ msg.content }}</p>
                 <span class="msg-time">{{ formatTime(msg.createdAt) }}</span>
