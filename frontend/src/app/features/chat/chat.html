@@ -3,13 +3,7 @@
     <!-- Sidebar -->
     <div class="chat-sidebar" [class.mobile-hidden]="activeConversation">
       <div class="sidebar-header">
-        <h2>Messages</h2>
-      </div>
-
-      <!-- Tabs -->
-      <div class="sidebar-tabs">
-        <button [class.active]="activeTab === 'chats'" (click)="activeTab = 'chats'">Chats</button>
-        <button [class.active]="activeTab === 'agents'" (click)="activeTab = 'agents'">Agents</button>
+        <h2>Chats</h2>
       </div>
 
       <!-- Search -->
@@ -19,7 +13,7 @@
       </div>
 
       <!-- Conversations List -->
-      <div class="conversations-list" *ngIf="activeTab === 'chats'">
+      <div class="conversations-list">
         <div class="conversation-item" *ngFor="let conv of getFilteredConversations()" 
              [class.active]="activeConversation?._id === conv._id"
              (click)="selectConversation(conv)">
@@ -36,24 +30,6 @@
         </div>
         <div class="sidebar-empty" *ngIf="getFilteredConversations().length === 0">
           <p>No conversations yet</p>
-        </div>
-      </div>
-
-      <!-- Agents List -->
-      <div class="agents-list" *ngIf="activeTab === 'agents'">
-        <div *ngIf="loadingAgents" class="flex-center py-8"><div class="spinner"></div></div>
-        <div class="agent-item" *ngFor="let agent of getFilteredAgents()" (click)="startAgentChat(agent)">
-          <div class="conv-avatar">
-            <img [src]="getAvatarUrl(agent.avatar)" [alt]="agent.name">
-          </div>
-          <div class="conv-info">
-            <span class="conv-name">{{ agent.name }}</span>
-            <span class="agent-role">Real Estate Agent</span>
-          </div>
-          <svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <div class="sidebar-empty" *ngIf="!loadingAgents && getFilteredAgents().length === 0">
-          <p>No agents found</p>
         </div>
       </div>
     </div>
@@ -109,7 +85,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
           <h3>Select a conversation</h3>
-          <p>Choose a chat from the sidebar or start a new one with an agent</p>
+          <p>Choose a chat from the sidebar to start messaging</p>
         </div>
       </ng-template>
     </div>

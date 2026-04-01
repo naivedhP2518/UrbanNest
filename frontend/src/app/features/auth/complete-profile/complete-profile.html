@@ -2,7 +2,7 @@
   <div class="container-sm">
     <div class="setup-header">
       <div class="setup-logo">
-        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L3 10V20C3 20.55 3.45 21 4 21H9V14H15V21H20C20.55 21 21 20.55 21 20V10L12 3Z" fill="currentColor"/></svg></div>
+        <img src="/assets/logo.png" alt="UrbanNest Logo" class="logo-image">
         <span class="logo-text">Urban<span class="accent">Nest</span></span>
       </div>
       <h1>Complete Your Profile</h1>
@@ -76,7 +76,7 @@
         <div *ngIf="success" class="success-message">{{ success }}</div>
 
         <div class="setup-actions">
-          <a routerLink="/" class="btn btn-ghost">Skip for now</a>
+          <a routerLink="/properties" class="btn btn-ghost">Skip for now</a>
           <button type="submit" class="btn btn-primary btn-lg" [disabled]="loading">
             <span *ngIf="!loading">Complete Setup</span>
             <span *ngIf="loading" class="btn-loading"><span class="btn-spinner"></span> Saving...</span>

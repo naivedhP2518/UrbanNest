@@ -51,4 +51,11 @@ export class NavbarComponent {
     this.isMobileMenuOpen = false;
     this.router.navigate(['/login']);
   }
+
+  getLogoRoute(): string {
+    const user = this.authService.currentUser();
+    if (!user) return '/';
+    if (user.role === 'agent') return '/agent/dashboard';
+    return '/properties';
+  }
 }

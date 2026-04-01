@@ -55,7 +55,7 @@
 .filter-group select:focus,
 .filter-group input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 0 3px rgba(245, 55, 29, 0.1);
 }
 
 .price-range {

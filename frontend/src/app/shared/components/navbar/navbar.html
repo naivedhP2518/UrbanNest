@@ -1,26 +1,19 @@
 <nav class="navbar" [class.scrolled]="isScrolled">
   <div class="container nav-content">
-    <a routerLink="/" class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 3L3 10V20C3 20.55 3.45 21 4 21H9V14H15V21H20C20.55 21 21 20.55 21 20V10L12 3Z" fill="currentColor"/>
-        </svg>
-      </div>
+    <a [routerLink]="getLogoRoute()" class="logo">
+      <img src="/assets/logo.png" alt="UrbanNest Logo" class="logo-image">
       <span class="logo-text">Urban<span class="logo-accent">Nest</span></span>
     </a>
 
     <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen">
-      <li>
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
-          Home
-        </a>
-      </li>
-      <li>
+      <!-- Properties: visible only for logged-in non-agent users -->
+      <li *ngIf="authService.isLoggedIn() && authService.currentUser()?.role !== 'agent'">
         <a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">
           Properties
         </a>
       </li>
-      <li>
+      <!-- Agents: visible only for logged-in non-agent users -->
+      <li *ngIf="authService.isLoggedIn() && authService.currentUser()?.role !== 'agent'">
         <a routerLink="/agents" routerLinkActive="active" (click)="closeMobileMenu()">
           Agents
         </a>

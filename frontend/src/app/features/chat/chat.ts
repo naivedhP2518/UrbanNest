@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ChatService, Conversation, Message } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
 import { AgentService, Agent } from '../../core/services/agent.service';
@@ -17,22 +18,20 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   conversations: Conversation[] = [];
-  agents: Agent[] = [];
   activeConversation: Conversation | null = null;
   messages: Message[] = [];
   newMessage = '';
   currentUser: any;
   searchQuery = '';
-  activeTab: 'chats' | 'agents' = 'chats';
   isTyping = false;
   typingUser = '';
-  loadingAgents = false;
   private subscriptions = new Subscription();
 
   constructor(
     private chatService: ChatService,
     private agentService: AgentService,
-    public authService: AuthService
+    public authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -45,11 +44,15 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.chatService.loadConversations();
     }
 
-    this.loadAgents();
-
     this.subscriptions.add(
       this.chatService.conversations$.subscribe((conversations) => {
         this.conversations = conversations;
+
+        // Check for agentId query param after conversations load
+        const agentId = this.route.snapshot.queryParamMap.get('agentId');
+        if (agentId && !this.activeConversation) {
+          this.handleAgentIdParam(agentId);
+        }
       })
     );
 
@@ -88,18 +91,24 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.scrollToBottom();
   }
 
-  loadAgents() {
-    this.loadingAgents = true;
-    this.agentService.getAgents().subscribe({
-      next: (res) => {
-        // Filter out current user from agents list
-        this.agents = res.data.filter(a => a._id !== this.currentUser?.id);
-        this.loadingAgents = false;
-      },
-      error: () => {
-        this.loadingAgents = false;
-      }
-    });
+  private handleAgentIdParam(agentId: string) {
+    // Check if we already have a conversation with this agent
+    const existingConv = this.conversations.find(c =>
+      c.participants.some(p => p._id === agentId)
+    );
+
+    if (existingConv) {
+      this.selectConversation(existingConv);
+    } else {
+      // Fetch agent details and start a new chat
+      this.agentService.getAgent(agentId).subscribe({
+        next: (res) => {
+          if (res.success && res.data) {
+            this.startAgentChat(res.data);
+          }
+        }
+      });
+    }
   }
 
   selectConversation(conversation: Conversation) {
@@ -114,16 +123,15 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   startAgentChat(agent: Agent) {
-    // 1. Check if we already have an active conversation with this agent
+    // Check if we already have an active conversation with this agent
     const existingConv = this.conversations.find(c => 
       c.participants.some(p => p._id === agent._id)
     );
 
     if (existingConv) {
       this.selectConversation(existingConv);
-      this.activeTab = 'chats';
     } else {
-      // 2. Prepare a "New Chat" placeholder
+      // Prepare a "New Chat" placeholder
       const mockConv: any = {
         _id: 'new_' + agent._id,
         participants: [
@@ -133,7 +141,6 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
       };
       this.activeConversation = mockConv;
       this.messages = [];
-      this.activeTab = 'chats';
     }
   }
 
@@ -145,7 +152,7 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (this.activeConversation._id.startsWith('new_')) {
         const participantId = this.activeConversation._id.split('_')[1];
         
-        // 1. Actual creation in DB
+        // Actual creation in DB
         this.chatService.createConversation(participantId).subscribe({
           next: (res) => {
             if (res.success) {
@@ -191,15 +198,6 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
         c.property?.title?.toLowerCase().includes(query)
       );
     });
-  }
-
-  getFilteredAgents(): Agent[] {
-    if (!this.searchQuery.trim()) return this.agents;
-    const query = this.searchQuery.toLowerCase();
-    return this.agents.filter(a => 
-      a.name.toLowerCase().includes(query) || 
-      a.email.toLowerCase().includes(query)
-    );
   }
 
   formatTime(dateStr?: string): string {

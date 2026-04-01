@@ -1,5 +1,5 @@
-<!-- Hero Section -->
-<section class="hero">
+<!-- Hero Section (only for non-logged-in users) -->
+<section class="hero" *ngIf="!authService.isLoggedIn()">
   <div class="hero-bg">
     <div class="hero-gradient"></div>
     <div class="hero-pattern"></div>
@@ -21,11 +21,10 @@
       </p>
       
       <div class="hero-cta animate-fade-in-up delay-3">
-        <a routerLink="/properties" class="btn btn-primary btn-lg">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          Explore Properties
+        <a routerLink="/register" class="btn btn-primary btn-lg">
+          Get Started
         </a>
-        <a routerLink="/agents" class="btn btn-outline btn-lg">Meet Our Agents</a>
+        <a routerLink="/login" class="btn btn-outline btn-lg">Log In</a>
       </div>
 
       <div class="hero-stats animate-fade-in-up delay-4">
@@ -80,49 +79,7 @@
   </div>
 </section>
 
-<!-- Features Section -->
-<section class="features-section">
-  <div class="container">
-    <div class="section-header text-center">
-      <span class="badge">Why UrbanNest</span>
-      <h2 class="section-title">Everything You Need In <span class="text-gradient">One Platform</span></h2>
-      <p class="section-subtitle mx-auto">We combine cutting-edge technology with industry expertise to deliver the smoothest real estate experience possible.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </div>
-        <h3>Smart Search</h3>
-        <p>Find your ideal property with advanced filters for location, price, type, and more.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <h3>Expert Agents</h3>
-        <p>Connect with trusted, experienced professionals who understand your needs.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3>Secure Process</h3>
-        <p>Every transaction is verified and documented for your complete peace of mind.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
-        <h3>Real-time Chat</h3>
-        <p>Communicate instantly with agents and sellers through our built-in messaging system.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Featured Properties -->
+<!-- Featured Properties (always visible) -->
 <section class="featured-section">
   <div class="container">
     <div class="flex-between mb-12">
@@ -172,8 +129,8 @@
   </div>
 </section>
 
-<!-- CTA Section -->
-<section class="cta-section">
+<!-- CTA Section (only for non-logged-in users) -->
+<section class="cta-section" *ngIf="!authService.isLoggedIn()">
   <div class="container">
     <div class="cta-card">
       <div class="cta-content">
@@ -181,7 +138,7 @@
         <p>Join thousands of happy homeowners who found their perfect property through UrbanNest.</p>
         <div class="cta-buttons">
           <a routerLink="/register" class="btn btn-primary btn-lg">Get Started Free</a>
-          <a routerLink="/properties" class="btn btn-glass btn-lg">Browse Properties</a>
+          <a routerLink="/login" class="btn btn-glass btn-lg">Log In</a>
         </div>
       </div>
     </div>

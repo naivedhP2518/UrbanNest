@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PropertyService, Property } from '../../core/services/property.service';
 import { AgentService } from '../../core/services/agent.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private propertyService: PropertyService,
-    private agentService: AgentService
+    private agentService: AgentService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

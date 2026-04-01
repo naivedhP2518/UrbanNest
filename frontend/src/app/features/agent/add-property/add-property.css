@@ -11,7 +11,7 @@
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--primary), #10b981);
+  background: linear-gradient(135deg, var(--primary), #f5371d);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -95,7 +95,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 0 4px rgba(245, 55, 29, 0.1);
   background: var(--surface);
 }
 

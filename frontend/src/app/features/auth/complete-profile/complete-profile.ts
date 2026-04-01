@@ -50,7 +50,16 @@ export class CompleteProfileComponent {
         this.loading = false;
         if (res.success) {
           this.success = 'Profile completed!';
-          setTimeout(() => this.router.navigate(['/']), 1000);
+          const user = res.user;
+          setTimeout(() => {
+            if (user?.role === 'agent') {
+              this.router.navigate(['/agent/dashboard']);
+            } else {
+              this.router.navigate(['/properties']);
+            }
+          }, 1000);
+        } else {
+          this.error = 'Something went wrong. Please try again.';
         }
       },
       error: (err) => {

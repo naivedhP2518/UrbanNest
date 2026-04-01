@@ -24,20 +24,12 @@
   margin-bottom: 1rem;
 }
 
-.footer-logo-icon {
-  width: 34px;
-  height: 34px;
-  background: var(--primary);
-  border-radius: var(--radius-sm);
+.footer-logo-image {
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-}
-
-.footer-logo-icon svg {
-  width: 20px;
-  height: 20px;
 }
 
 .footer-logo-text {

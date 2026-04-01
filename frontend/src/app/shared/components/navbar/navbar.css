@@ -31,26 +31,15 @@
   z-index: 10;
 }
 
-.logo-icon {
-  width: 34px;
-  height: 34px;
-  background: var(--primary);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
+.logo-image {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
   transition: var(--transition);
 }
 
-.logo-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.logo:hover .logo-icon {
+.logo:hover .logo-image {
   transform: scale(1.05);
-  border-radius: 10px;
 }
 
 .logo-text {
@@ -137,7 +126,7 @@
 .user-profile-btn:hover,
 .user-profile-btn.active {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 0 3px rgba(245, 55, 29, 0.08);
 }
 
 .user-avatar {

@@ -65,7 +65,7 @@ export class RegisterComponent implements AfterViewInit {
           if (res.user && !res.user.profileCompleted) {
             this.router.navigate(['/complete-profile']);
           } else {
-            this.router.navigate(['/']);
+            this.redirectAfterAuth(res.user);
           }
         },
         error: (err) => {
@@ -97,7 +97,7 @@ export class RegisterComponent implements AfterViewInit {
         if (res.user && !res.user.profileCompleted) {
           this.router.navigate(['/complete-profile']);
         } else {
-          this.router.navigate(['/']);
+          this.redirectAfterAuth(res.user);
         }
       },
       error: (err) => {
@@ -105,5 +105,13 @@ export class RegisterComponent implements AfterViewInit {
         this.loading = false;
       },
     });
+  }
+
+  private redirectAfterAuth(user: any) {
+    if (user?.role === 'agent') {
+      this.router.navigate(['/agent/dashboard']);
+    } else {
+      this.router.navigate(['/properties']);
+    }
   }
 }
