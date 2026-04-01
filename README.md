@@ -1,109 +1,129 @@
-# 🏠 UrbanNest: Premium Real Estate & Messaging Platform
+# <div align="center">🏠 UrbanNest</div>
+## <div align="center">Premium Real Estate & Real-Time Messaging Platform</div>
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Angular](https://img.shields.io/badge/Angular-v21.2-dd0031.svg?logo=angular&logoColor=white)](https://angular.io/)
-[![Node.js](https://img.shields.io/badge/Node.js-v20.x-339933.svg?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+<div align="center">
+
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248.svg?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express.js-v4.x-000000.svg?logo=express&logoColor=white)](https://expressjs.com/)
+[![Angular](https://img.shields.io/badge/Angular-v21.2-dd0031.svg?logo=angular&logoColor=white)](https://angular.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-v18.x-339933.svg?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-v5.x-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-v4.x-010101.svg?logo=socket.io&logoColor=white)](https://socket.io/)
 
-**UrbanNest** is a full-stack MEAN application designed to bridge the gap between real estate agents and property seekers. It features a robust real-time communication system, advanced property management, and a dual-purpose database architecture for administrative and application data.
+[![RxJS](https://img.shields.io/badge/RxJS-v7.x-B7178C.svg?logo=reactivex&logoColor=white)](https://rxjs.dev/)
+[![JWT](https://img.shields.io/badge/JWT-Auth-000000.svg?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![Multer](https://img.shields.io/badge/Multer-Upload-ff69b4.svg)](https://github.com/expressjs/multer)
+[![CORS](https://img.shields.io/badge/CORS-Enabled-003366.svg)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+[![BcryptJS](https://img.shields.io/badge/BcryptJS-Security-yellow.svg)](https://www.npmjs.com/package/bcryptjs)
+
+</div>
 
 ---
 
-## 🚀 Key Features
+### 📖 Introduction
 
-| Feature                | Description                                                                 | Tech Used              |
+**UrbanNest** is a cutting-edge full-stack **MEAN** application designed to revolutionize the connection between real estate agents and property seekers. By combining real-time communication with a sophisticated property management engine, UrbanNest provides a seamless, secure, and professional experience for all stakeholders.
+
+---
+
+### ✨ Key Features
+
+| Feature                | Description                                                                 | Tech Stack             |
 |------------------------|-----------------------------------------------------------------------------|------------------------|
-| **Real-Time Chat**     | Instant messaging between users and agents with persistence and notifications. | Socket.IO, Mongoose    |
-| **Dual Database**      | Separate storage for Admin/Security data and Application/Property data.    | MongoDB Clusters       |
-| **Agent Directory**    | Searchable database of verified real estate agents with performance metrics. | Angular Features       |
-| **Property CRUD**      | Full lifecycle management for property listings including image uploads.     | Express, Multer        |
-| **Role-Based Auth**    | Secure access control for Admins, Agents, and regular Users.                | JWT, BcryptJS, Express |
-| **Profile Completion** | Guided onboarding flow for agents to set up their professional portfolio.    | Angular Reactive Forms |
+| **💬 Real-Time Chat**  | Instant messaging with persistence, typing indicators, and notifications.    | Socket.IO, Mongoose    |
+| **🗄️ Dual DB Engine**  | Isolated storage for Admin security data and Application property data.     | MongoDB Multi-Cluster   |
+| **🕵️ Agent Directory** | Advanced search for verified agents with professional performance metrics. | Angular Core           |
+| **🏗️ Property CRUD**   | Comprehensive lifecycle management for listings with dynamic image uploads. | Express, Multer        |
+| **🔐 Secure Auth**    | Multi-role RBAC (Admin, Agent, User) with encrypted credential handling.     | JWT, BcryptJS          |
+| **📝 Profile Flow**    | Interactive onboarding requiring agents to verify professional credentials. | Reactive Forms         |
 
 ---
 
-## 🛠️ Technology Stack
+### 🛠️ Technology Stack
 
-### Frontend
-- **Framework**: Angular v21.2.0 (Latest Enterprise Architecture)
-- **State Management**: RxJS (Reactive Extensions for JavaScript)
-- **Styling**: Modern CSS3 with Flexbox/Grid (Glassmorphism & High-end UI)
-- **Communication**: Socket.io-client for real-time duplex data flow.
+#### **Frontend Ecosystem**
+- **Framework**: Angular v18+ (Enterprise-grade architecture)
+- **State Management**: Reactive streams with **RxJS**
+- **UI Architecture**: Modern CSS3 using Flex/Grid with a focus on Glassmorphism
+- **Real-Time**: Bi-directional communication via **Socket.io-client**
 
-### Backend
-- **Runtime**: Node.js & Express.js (v5.2.1)
-- **Database**: MongoDB with Mongoose (Dual-Connection Strategy)
-- **Security**: JWT (JSON Web Tokens) & Bcrypt for salted hashing.
-- **File Handling**: Multer for cloud-optimized image processing.
+#### **Backend Infrastructure**
+- **Runtime**: Node.js & Express.js (High-performance API)
+- **Persistence**: MongoDB with **Mongoose** (Relational-style modeling)
+- **Security**: Stateless authentication using **JWT** and **BcryptJS** hashing
+- **File Processing**: Optimized image handling through **Multer**
 
 ---
 
-## 📂 Project Structure
+### 📂 Project Architecture
 
 ```bash
 UrbanNest/
-├── 📂 backend             # Node.js / Express Server
-│   ├── 📂 middleware      # Auth & Security logic
-│   ├── 📂 models          # Mongoose Schemas (Admin, User, Property, Message)
-│   ├── 📂 routes          # API Endpoints
-│   └── 📄 server.js       # Entry point & Socket.io setup
-├── 📂 frontend            # Angular Client
-│   ├── 📂 src/app/core    # Services & Guards
-│   ├── 📂 src/app/shared  # Reusable UI Components
-│   └── 📂 src/app/features # Business Logic Pages (Chat, Properties, Agents)
-└── 📄 README.md           # You are here!
+├── 📂 backend             # Server logic & API services
+│   ├── 📂 middleware      # Security protocols & RBAC
+│   ├── 📂 models          # Data schemas (Admin, User, Property, Message)
+│   ├── 📂 routes          # RESTful endpoints
+│   └── 📄 server.js       # Global initialization & Socket hub
+├── 📂 frontend            # Client-side application
+│   ├── 📂 src/app/core    # Singleton services & state managers
+│   ├── 📂 src/app/shared  # Modular UI components
+│   └── 📂 src/app/features # Domain-specific modules (Chat, Properties)
+└── 📄 README.md           # Documentation root
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+### ⚙️ Setup & Installation
 
-### 1. Prerequisites
-- Node.js (v18.x or higher)
-- MongoDB Atlas account or local MongoDB instance.
+#### **Prerequisites**
+- Node.js (v18+) & NPM
+- MongoDB Atlas Account
 - Angular CLI (`npm install -g @angular/cli`)
 
-### 2. Backend Configuration
-Navigate to the `backend` directory and install dependencies:
+#### **1. Backend Initialization**
 ```bash
 cd backend
 npm install
-```
-Create a `.env` file in the `backend` folder:
-```env
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-```
-Start the server:
-```bash
+# Configure .env with MONGODB_URI, JWT_SECRET, and PORT
 npm run dev
 ```
 
-### 3. Frontend Configuration
-Navigate to the `frontend` directory and install dependencies:
+#### **2. Frontend Initialization**
 ```bash
 cd frontend
 npm install
-```
-Start the development server:
-```bash
 npm start
 ```
-Access the app at `http://localhost:4200`.
+> Go to: `http://localhost:4200`
 
 ---
 
-## 🤝 Contributing
-UrbanNest is developed with a focus on modern web standards and clean code architecture. Feel free to fork the repository and submit pull requests for any enhancements.
+### 🤝 Strategic Contribution
+
+UrbanNest is built on the principles of **scalable architecture** and **clean code**. We follow the *Single Responsibility Principle* and *DRY* patterns to maintain a professional codebase.
+
+We invite developers to contribute in the following areas:
+- [ ] UI/UX Enhancements for the Property Dashboard
+- [ ] Performance Optimization for Real-time Websockets
+- [ ] Unit Testing coverage for Core services
 
 ---
 
-## 🛡️ License
-Distributed under the MIT License. See `LICENSE` for more information.
+### 👨‍💻 Core Contributors
+
+<div align="center">
+
+| 👤 Developer | Role/Focus |
+| :--- | :--- |
+| **Varun Thacker** | Backend Architecture & Real-time Sync |
+| **Darji Vrund** | Frontend UI & Design System |
+| **Man Patel** | Authentication & Security Logic |
+| **Abhay Maurya** | Property Management & CRUD Services |
+
+</div>
 
 ---
 
-<p align="center">
-  Developed with ❤️ for the Modern Real Estate Market
-</p>
+<div align="center">
+  <img src="https://img.shields.io/badge/Designed_with_❤️_by_UrbanNest_Team-blue?style=for-the-badge" />
+</div>
