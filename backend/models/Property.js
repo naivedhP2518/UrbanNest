@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { dataDB } = require('../config/db');
 
 const propertySchema = mongoose.Schema(
   {
@@ -45,4 +46,4 @@ const propertySchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Property', propertySchema);
+module.exports = dataDB.model('Property', propertySchema);

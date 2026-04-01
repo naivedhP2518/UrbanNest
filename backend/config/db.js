@@ -1,13 +1,23 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
-  }
-};
+const adminDB = mongoose.createConnection(process.env.MONGO_URI_ADMIN);
 
-module.exports = connectDB;
+adminDB.on('connected', () => {
+  console.log(`Admin DB Connected`);
+});
+
+adminDB.on('error', (err) => {
+  console.error(`Admin DB Connection Error: ${err.message}`);
+});
+
+const dataDB = mongoose.createConnection(process.env.MONGO_URI_DATA);
+
+dataDB.on('connected', () => {
+  console.log(`Data DB Connected`);
+});
+
+dataDB.on('error', (err) => {
+  console.error(`Data DB Connection Error: ${err.message}`);
+});
+
+module.exports = { adminDB, dataDB };

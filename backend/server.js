@@ -2,9 +2,13 @@ const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
 const dotenv = require('dotenv');
+
+// Load env vars BEFORE requiring local files that depend on them
+dotenv.config();
+
 const cors = require('cors');
 const path = require('path');
-const connectDB = require('./config/db');
+const { adminDB, dataDB } = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -12,12 +16,6 @@ const messageRoutes = require('./routes/messageRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const Message = require('./models/Message');
 const Conversation = require('./models/Conversation');
-
-// Load env vars
-dotenv.config();
-
-// Connect to database
-connectDB();
 
 const app = express();
 const server = http.createServer(app);

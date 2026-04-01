@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { dataDB } = require('../config/db');
+const { adminDB } = require('../config/db');
 
-const userSchema = mongoose.Schema(
+const adminSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -21,32 +21,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a password'],
       minlength: 6,
-      select: false, // Don't return password by default
+      select: false,
     },
     role: {
       type: String,
-      enum: ['user', 'agent', 'admin'],
-      default: 'user',
-    },
-    avatar: {
-      type: String,
-      default: 'default-agent.png'
-    },
-    bio: {
-      type: String,
-      default: ''
-    },
-    experience: {
-      type: Number,
-      default: 0
-    },
-    happyClients: {
-      type: Number,
-      default: 0
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
+      default: 'admin',
     },
   },
   {
@@ -55,7 +34,7 @@ const userSchema = mongoose.Schema(
 );
 
 // Hash password before saving
-userSchema.pre('save', async function (next) {
+adminSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -64,9 +43,9 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function (enteredPassword) {
+// Match admin entered password to hashed password in database
+adminSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = dataDB.model('User', userSchema);
+module.exports = adminDB.model('Admin', adminSchema);

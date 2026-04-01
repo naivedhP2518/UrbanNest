@@ -1,20 +1,22 @@
 const User = require('../models/User');
+const Admin = require('../models/Admin');
 const generateToken = require('../utils/generateToken');
 
-// @desc    Register a new user
+// @desc    Register a new user or admin
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
-    const userExists = await User.findOne({ email });
+    const Model = role === 'admin' ? Admin : User;
+    const userExists = await Model.findOne({ email });
 
     if (userExists) {
       return res.status(400).json({ success: false, message: 'User already exists' });
     }
 
-    const user = await User.create({
+    const user = await Model.create({
       name,
       email,
       password,
@@ -47,7 +49,14 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email }).select('+password');
+    let user = await User.findOne({ email }).select('+password');
+    let Model = User;
+
+    // If not found in User DB, check Admin DB
+    if (!user) {
+      user = await Admin.findOne({ email }).select('+password');
+      Model = Admin;
+    }
 
     if (user && (await user.matchPassword(password))) {
       res.json({

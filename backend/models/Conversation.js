@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { dataDB } = require('../config/db');
 
 const conversationSchema = new mongoose.Schema({
   participants: [{
@@ -21,4 +22,4 @@ const conversationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Conversation', conversationSchema);
+module.exports = dataDB.model('Conversation', conversationSchema);

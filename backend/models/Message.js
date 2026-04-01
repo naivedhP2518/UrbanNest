@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { dataDB } = require('../config/db');
 
 const messageSchema = new mongoose.Schema({
   conversation: {
@@ -32,4 +33,4 @@ const messageSchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Message', messageSchema);
+module.exports = dataDB.model('Message', messageSchema);
