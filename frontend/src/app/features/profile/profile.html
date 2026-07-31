@@ -1,0 +1,72 @@
+<div class="profile-page">
+  <div class="container-sm">
+    <div class="page-header">
+      <h1>Edit Profile</h1>
+      <p>Update your personal information</p>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-avatar-section">
+        <div class="profile-avatar">
+          <img [src]="authService.getAvatarUrl()" alt="Profile">
+        </div>
+        <div class="profile-meta">
+          <h3>{{ authService.currentUser()?.name }}</h3>
+          <span class="profile-role-badge">{{ authService.currentUser()?.role }}</span>
+        </div>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h4>Personal Information</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" formControlName="name" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" formControlName="email" placeholder="your@email.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section" *ngIf="authService.currentUser()?.role === 'agent'">
+          <h4>Agent Details</h4>
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" formControlName="bio" placeholder="Tell clients about yourself..." rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="experience">Years of Experience</label>
+              <input type="number" id="experience" formControlName="experience" min="0">
+            </div>
+            <div class="form-group">
+              <label for="happyClients">Happy Clients</label>
+              <input type="number" id="happyClients" formControlName="happyClients" min="0">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Security</h4>
+          <div class="form-group">
+            <label for="password">New Password <span class="optional">(leave blank to keep current)</span></label>
+            <input type="password" id="password" formControlName="password" placeholder="••••••••">
+          </div>
+        </div>
+
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" [disabled]="profileForm.invalid || loading">
+            <span *ngIf="!loading">Save Changes</span>
+            <span *ngIf="loading">Saving...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

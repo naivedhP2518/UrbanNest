@@ -1,0 +1,99 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="container nav-content">
+    <a [routerLink]="getLogoRoute()" class="logo">
+      <img src="/assets/logo.png" alt="UrbanNest Logo" class="logo-image">
+      <span class="logo-text">Urban<span class="logo-accent">Nest</span></span>
+    </a>
+
+    <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen">
+      <!-- Properties: visible only for logged-in non-agent users -->
+      <li *ngIf="authService.isLoggedIn() && authService.currentUser()?.role !== 'agent'">
+        <a routerLink="/properties" routerLinkActive="active" (click)="closeMobileMenu()">
+          Properties
+        </a>
+      </li>
+      <!-- Agents: visible only for logged-in non-agent users -->
+      <li *ngIf="authService.isLoggedIn() && authService.currentUser()?.role !== 'agent'">
+        <a routerLink="/agents" routerLinkActive="active" (click)="closeMobileMenu()">
+          Agents
+        </a>
+      </li>
+      <li *ngIf="authService.isLoggedIn()">
+        <a routerLink="/chat" routerLinkActive="active" (click)="closeMobileMenu()">
+          Chat
+        </a>
+      </li>
+      <li *ngIf="authService.currentUser()?.role === 'agent' || authService.currentUser()?.role === 'admin'">
+        <a routerLink="/agent/dashboard" routerLinkActive="active" (click)="closeMobileMenu()">
+          Dashboard
+        </a>
+      </li>
+
+      <!-- Mobile-only auth buttons -->
+      <li class="mobile-auth" *ngIf="!authService.isLoggedIn()">
+        <a routerLink="/login" class="btn btn-outline btn-sm btn-block" (click)="closeMobileMenu()">Log In</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm btn-block" (click)="closeMobileMenu()">Sign Up</a>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <ng-container *ngIf="!authService.isLoggedIn(); else userMenu">
+        <a routerLink="/login" class="btn-login">Log In</a>
+        <a routerLink="/register" class="btn btn-primary btn-sm">Sign Up</a>
+      </ng-container>
+      
+      <ng-template #userMenu>
+        <div class="user-profile-container">
+          <button class="user-profile-btn" (click)="toggleMenu()" [class.active]="isMenuOpen">
+            <div class="user-avatar">
+              <img [src]="authService.getAvatarUrl()" alt="Profile" />
+            </div>
+            <div class="user-meta">
+              <span class="user-name">{{ authService.currentUser()?.name }}</span>
+              <span class="user-role" *ngIf="authService.currentUser()?.role !== 'user'">{{ authService.currentUser()?.role }}</span>
+            </div>
+            <svg class="chevron" [class.open]="isMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="profile-dropdown" *ngIf="isMenuOpen">
+            <div class="dropdown-header">
+              <div class="dropdown-avatar">
+                <img [src]="authService.getAvatarUrl()" alt="Profile" />
+              </div>
+              <div>
+                <p class="dropdown-name">{{ authService.currentUser()?.name }}</p>
+                <p class="dropdown-email">{{ authService.currentUser()?.email }}</p>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a routerLink="/profile" class="dropdown-item" (click)="isMenuOpen = false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              My Profile
+            </a>
+            <a routerLink="/chat" class="dropdown-item" (click)="isMenuOpen = false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Messages
+            </a>
+            <div class="dropdown-divider"></div>
+            <button (click)="logout()" class="dropdown-item text-danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Mobile hamburger -->
+      <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile overlay -->
+<div class="mobile-overlay" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()"></div>

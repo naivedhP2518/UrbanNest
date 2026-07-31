@@ -1,0 +1,95 @@
+<div class="chat-page">
+  <div class="chat-layout">
+    <!-- Sidebar -->
+    <div class="chat-sidebar" [class.mobile-hidden]="activeConversation">
+      <div class="sidebar-header">
+        <h2>Chats</h2>
+      </div>
+
+      <!-- Search -->
+      <div class="sidebar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search conversations...">
+      </div>
+
+      <!-- Conversations List -->
+      <div class="conversations-list">
+        <div class="conversation-item" *ngFor="let conv of getFilteredConversations()" 
+             [class.active]="activeConversation?._id === conv._id"
+             (click)="selectConversation(conv)">
+          <div class="conv-avatar">
+            <img [src]="getAvatarUrl(getOtherParticipant(conv)?.avatar)" [alt]="getOtherParticipant(conv)?.name">
+          </div>
+          <div class="conv-info">
+            <div class="conv-top">
+              <span class="conv-name">{{ getOtherParticipant(conv)?.name }}</span>
+              <span class="conv-time">{{ formatTime(conv.lastMessageAt) }}</span>
+            </div>
+            <p class="conv-preview">{{ conv.lastMessage || 'No messages yet' }}</p>
+          </div>
+        </div>
+        <div class="sidebar-empty" *ngIf="getFilteredConversations().length === 0">
+          <p>No conversations yet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-main" [class.mobile-visible]="activeConversation">
+      <ng-container *ngIf="activeConversation; else noChat">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <button class="back-btn" (click)="activeConversation = null">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="conv-avatar sm">
+            <img [src]="getAvatarUrl(getOtherParticipant(activeConversation)?.avatar)" [alt]="getOtherParticipant(activeConversation)?.name">
+          </div>
+          <div class="chat-header-info">
+            <h3>{{ getOtherParticipant(activeConversation)?.name }}</h3>
+            <span class="chat-header-role" *ngIf="getOtherParticipant(activeConversation)?.role">{{ getOtherParticipant(activeConversation)?.role }}</span>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-area" #messagesContainer>
+          <div class="messages-list">
+            <div class="message" *ngFor="let msg of messages" 
+                 [class.sent]="msg.sender?._id === (currentUser?.id || currentUser?._id)" 
+                 [class.received]="msg.sender?._id !== (currentUser?.id || currentUser?._id)">
+              <div class="msg-bubble">
+                <p>{{ msg.content }}</p>
+                <span class="msg-time">{{ formatTime(msg.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="typing-indicator" *ngIf="isTyping">
+            <span>{{ typingUser }} is typing</span>
+            <div class="typing-dots"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area">
+          <div class="chat-input-wrapper">
+            <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" (input)="onTyping()" placeholder="Type a message...">
+            <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noChat>
+        <div class="no-chat-selected">
+          <div class="no-chat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>Select a conversation</h3>
+          <p>Choose a chat from the sidebar to start messaging</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

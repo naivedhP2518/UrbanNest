@@ -1,0 +1,67 @@
+<div class="properties-page">
+  <div class="container">
+    <div class="page-hero">
+      <h1>Explore <span class="text-gradient">Properties</span></h1>
+      <p>Browse our curated collection of premium properties for sale and rent</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <select [(ngModel)]="filters.type" (change)="applyFilters()">
+          <option value="">All Types</option>
+          <option value="Sale">For Sale</option>
+          <option value="Rent">For Rent</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <input type="text" [(ngModel)]="filters.city" (input)="applyFilters()" placeholder="Search by city...">
+      </div>
+      <div class="filter-group price-range">
+        <input type="number" [(ngModel)]="filters.minPrice" (input)="applyFilters()" placeholder="Min Price">
+        <span class="range-separator">—</span>
+        <input type="number" [(ngModel)]="filters.maxPrice" (input)="applyFilters()" placeholder="Max Price">
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex-center py-20">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="properties-grid" *ngIf="!loading && properties.length > 0">
+      <div class="property-card" *ngFor="let property of properties" [routerLink]="['/properties', property._id]">
+        <div class="property-image">
+          <img [src]="getPropertyImage(property)" [alt]="property.title">
+          <span class="property-type-badge">{{ property.type }}</span>
+          <span class="property-status" *ngIf="property.status !== 'Available'">{{ property.status }}</span>
+        </div>
+        <div class="property-details">
+          <h3>{{ property.title }}</h3>
+          <p class="property-location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {{ property.city }}
+          </p>
+          <div class="property-amenities" *ngIf="property.amenities && property.amenities.length > 0">
+            <span *ngFor="let amenity of property.amenities.slice(0, 3)">{{ amenity }}</span>
+          </div>
+          <div class="property-card-footer">
+            <span class="property-price">₹{{ property.price.toLocaleString('en-IN') }}</span>
+            <div class="property-agent" *ngIf="property.agent">
+              <img [src]="'http://localhost:5000/images/default-agent.png'" [alt]="property.agent.name">
+              <span>{{ property.agent.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && properties.length === 0" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="56" height="56"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <h3>No properties found</h3>
+      <p>Try adjusting your filters or check back later for new listings</p>
+    </div>
+  </div>
+</div>

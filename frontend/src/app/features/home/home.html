@@ -1,0 +1,146 @@
+<!-- Hero Section (only for non-logged-in users) -->
+<section class="hero" *ngIf="!authService.isLoggedIn()">
+  <div class="hero-bg">
+    <div class="hero-gradient"></div>
+    <div class="hero-pattern"></div>
+  </div>
+  <div class="container hero-content">
+    <div class="hero-text">
+      <div class="hero-badge animate-fade-in-up">
+        <span class="pulse-dot"></span><br>
+        <span>Modern Real Estate Platform</span>
+      </div>
+      
+      <h1 class="hero-title animate-fade-in-up delay-1">
+        Find Your Perfect<br>
+        <span class="text-gradient">Dream Home</span>
+      </h1>
+      
+      <p class="hero-description animate-fade-in-up delay-2">
+        Discover premium properties, connect with expert agents, and make your real estate journey seamless with UrbanNest.
+      </p>
+      
+      <div class="hero-cta animate-fade-in-up delay-3">
+        <a routerLink="/register" class="btn btn-primary btn-lg">
+          Get Started
+        </a>
+        <a routerLink="/login" class="btn btn-outline btn-lg">Log In</a>
+      </div>
+
+      <div class="hero-stats animate-fade-in-up delay-4">
+        <div class="stat-item">
+          <span class="stat-number">{{ stats.properties || '0' }}</span>
+          <span class="stat-label">Properties</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">{{ stats.agents || '0' }}</span>
+          <span class="stat-label">Expert Agents</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">{{ stats.clients || '0' }}</span>
+          <span class="stat-label">Happy Clients</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="hero-visual animate-fade-in-up delay-2">
+      <div class="hero-card-stack">
+        <div class="hero-main-card">
+          <div class="hero-image-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Premium Properties</span>
+          </div>
+        </div>
+        <div class="hero-float-card top-right">
+          <div class="float-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <span class="float-title">Verified</span>
+            <span class="float-sub">100% Secure</span>
+          </div>
+        </div>
+        <div class="hero-float-card bottom-left">
+          <div class="float-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <span class="float-title">{{ stats.agents || '0' }}+ Agents</span>
+            <span class="float-sub">Ready to help</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Properties (always visible) -->
+<section class="featured-section">
+  <div class="container">
+    <div class="flex-between mb-12">
+      <div class="section-header">
+        <span class="badge">Featured</span>
+        <h2 class="section-title">Latest <span class="text-gradient">Properties</span></h2>
+      </div>
+      <a routerLink="/properties" class="btn btn-outline">View All</a>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex-center py-20">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="properties-grid" *ngIf="!loading && featuredProperties.length > 0">
+      <div class="property-card" *ngFor="let property of featuredProperties" [routerLink]="['/properties', property._id]">
+        <div class="property-image">
+          <img [src]="property.images && property.images.length > 0 ? (property.images[0].startsWith('http') ? property.images[0] : 'http://localhost:5000' + property.images[0]) : 'assets/modern-home.png'" [alt]="property.title">
+          <span class="property-badge">FOR {{ property.type | uppercase }}</span>
+        </div>
+        <div class="property-info">
+          <h3 class="property-title">{{ property.title }}</h3>
+          <p class="property-location">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {{ property.city }}
+          </p>
+          <div class="property-footer">
+            <span class="property-price">₹{{ property.price.toLocaleString('en-IN') }}</span>
+            <span class="property-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && featuredProperties.length === 0" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <p>No properties listed yet. Check back soon!</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section (only for non-logged-in users) -->
+<section class="cta-section" *ngIf="!authService.isLoggedIn()">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-content">
+        <h2>Ready to Find Your Dream Home?</h2>
+        <p>Join thousands of happy homeowners who found their perfect property through UrbanNest.</p>
+        <div class="cta-buttons">
+          <a routerLink="/register" class="btn btn-primary btn-lg">Get Started Free</a>
+          <a routerLink="/login" class="btn btn-glass btn-lg">Log In</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,43 @@
+<div class="agents-page">
+  <div class="container">
+    <div class="page-hero">
+      <h1>Our <span class="text-gradient">Expert Agents</span></h1>
+      <p>Connect with experienced professionals who will guide you through your real estate journey</p>
+    </div>
+
+    <div *ngIf="loading" class="flex-center py-20"><div class="spinner"></div></div>
+
+    <div class="agents-grid" *ngIf="!loading && agents.length > 0">
+      <div class="agent-card" *ngFor="let agent of agents" [routerLink]="['/agents', agent._id]">
+        <div class="agent-avatar-wrapper">
+          <img [src]="authService.getAvatarUrl(agent.avatar)" [alt]="agent.name">
+        </div>
+        <div class="agent-info">
+          <h3>{{ agent.name }}</h3>
+          <span class="agent-role-tag">Real Estate Agent</span>
+          <p class="agent-bio" *ngIf="agent.bio">{{ agent.bio }}</p>
+          <div class="agent-stats">
+            <div class="agent-stat" *ngIf="agent.experience">
+              <span class="stat-val">{{ agent.experience }}</span>
+              <span class="stat-lbl">Yrs Exp</span>
+            </div>
+            <div class="agent-stat" *ngIf="agent.happyClients">
+              <span class="stat-val">{{ agent.happyClients }}</span>
+              <span class="stat-lbl">Clients</span>
+            </div>
+          </div>
+        </div>
+        <div class="agent-actions">
+          <button class="btn btn-outline btn-sm" [routerLink]="['/agents', agent._id]">View Profile</button>
+          <button class="btn btn-primary btn-sm" [routerLink]="['/chat']" [queryParams]="{ agentId: agent._id }" (click)="$event.stopPropagation()">Message</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && agents.length === 0" class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="56" height="56"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <h3>No agents found</h3>
+      <p>Check back soon for new agents</p>
+    </div>
+  </div>
+</div>
